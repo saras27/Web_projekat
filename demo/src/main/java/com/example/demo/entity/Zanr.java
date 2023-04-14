@@ -9,5 +9,6 @@ import jakarta.persistence.Id;
 public class Zanr {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
     private String naziv;
 }
