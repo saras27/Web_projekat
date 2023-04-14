@@ -19,7 +19,7 @@ public class Knjiga {
     private int brojStrana;
     @Column
     private String opis;
-    @ManyToOne
+    @OneToOne
     private Zanr zanr;
     @Column
     private double ocena;
