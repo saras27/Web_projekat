@@ -10,4 +10,20 @@ public class Autor extends Korisnik{
     private boolean aktivan;
     @OneToMany
     private List<Knjiga> knjige;
+
+    public boolean isAktivan() {
+        return aktivan;
+    }
+
+    public void setAktivan(boolean aktivan) {
+        this.aktivan = aktivan;
+    }
+
+    public List<Knjiga> getKnjige() {
+        return knjige;
+    }
+
+    public void setKnjige(List<Knjiga> knjige) {
+        this.knjige = knjige;
+    }
 }
