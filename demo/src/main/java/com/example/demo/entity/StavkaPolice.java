@@ -2,16 +2,18 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class StavkaPolice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    @OneToMany
-    private List<Recenzija> recenzije;
-    @OneToOne
+    @OneToMany(mappedBy = "stavkaPolice", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Recenzija> recenzije = new HashSet<>();
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Knjiga knjiga;
 
     public Long getId() {
@@ -22,11 +24,11 @@ public class StavkaPolice {
         Id = id;
     }
 
-    public List<Recenzija> getRecenzije() {
+    public Set<Recenzija> getRecenzije() {
         return recenzije;
     }
 
-    public void setRecenzije(List<Recenzija> recenzije) {
+    public void setRecenzije(Set<Recenzija> recenzije) {
         this.recenzije = recenzije;
     }
 

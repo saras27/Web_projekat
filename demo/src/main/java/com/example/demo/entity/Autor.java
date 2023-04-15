@@ -1,15 +1,17 @@
 package com.example.demo.entity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Autor extends Korisnik{
     @Column
     private boolean aktivan;
-    @OneToMany
-    private List<Knjiga> knjige;
+    @ManyToMany
+    @JoinTable(name = "Knjige", joinColumns = @JoinColumn(name = "autor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "knjiga_id", referencedColumnName = "id"))
+    private Set<Knjiga> knjige = new HashSet<>();
 
     public boolean isAktivan() {
         return aktivan;
@@ -19,11 +21,11 @@ public class Autor extends Korisnik{
         this.aktivan = aktivan;
     }
 
-    public List<Knjiga> getKnjige() {
+    public Set<Knjiga> getKnjige() {
         return knjige;
     }
 
-    public void setKnjige(List<Knjiga> knjige) {
+    public void setKnjige(Set<Knjiga> knjige) {
         this.knjige = knjige;
     }
 }

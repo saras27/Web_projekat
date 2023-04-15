@@ -13,7 +13,7 @@ public class Recenzija {
     private String tekst;
     @Column
     private String datumRecenzije;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Korisnik korisnik;
 
     public Long getId() {

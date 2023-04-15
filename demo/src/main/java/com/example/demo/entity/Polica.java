@@ -2,7 +2,8 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Polica {
@@ -14,7 +15,8 @@ public class Polica {
     @Column
     private String primarna;
     @ManyToMany
-    private List<StavkaPolice> stavkePolice;
+    @JoinTable(name = "StavkePolice", joinColumns = @JoinColumn(name = "polica_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "stavkaPolice_id", referencedColumnName = "id"))
+    private Set<StavkaPolice> stavkePolice = new HashSet<>();
 
     public Long getId() {
         return Id;
@@ -40,11 +42,11 @@ public class Polica {
         this.primarna = primarna;
     }
 
-    public List<StavkaPolice> getStavkePolice() {
+    public Set<StavkaPolice> getStavkePolice() {
         return stavkePolice;
     }
 
-    public void setStavkePolice(List<StavkaPolice> stavkePolice) {
+    public void setStavkePolice(Set<StavkaPolice> stavkePolice) {
         this.stavkePolice = stavkePolice;
     }
 }

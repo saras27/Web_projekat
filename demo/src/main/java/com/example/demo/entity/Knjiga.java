@@ -19,7 +19,7 @@ public class Knjiga {
     private int brojStrana;
     @Column
     private String opis;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Zanr zanr;
     @Column
     private double ocena;
