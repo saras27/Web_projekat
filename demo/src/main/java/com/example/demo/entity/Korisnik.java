@@ -2,8 +2,13 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
-public class Korisnik {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Korisnik implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
@@ -11,18 +16,21 @@ public class Korisnik {
     private String ime;
     @Column
     private String prezime;
-    @Column
+    @Column(name = "korisnicko_ime")
     private String korisnickoIme;
-    @Column
+    @Column(name = "mejl_adresa")
     private String mejlAdresa;
     @Column
     private String lozinka;
-    @Column
+    @Column(name = "datum_rodjenja")
     private String datumRodjenja;
     @Column
     private String opis;
     @Column
     private String uloga;
+
+    @OneToMany
+    private Set<Knjiga> knjiga = new HashSet<>();
 
     public Long getId() {
         return Id;
@@ -94,5 +102,20 @@ public class Korisnik {
 
     public void setUloga(String uloga) {
         this.uloga = uloga;
+    }
+
+    @Override
+    public String toString() {
+        return "Korisnik{" +
+                "Id=" + Id +
+                ", ime='" + ime + '\'' +
+                ", prezime='" + prezime + '\'' +
+                ", korisnickoIme='" + korisnickoIme + '\'' +
+                ", mejlAdresa='" + mejlAdresa + '\'' +
+                ", lozinka='" + lozinka + '\'' +
+                ", datumRodjenja='" + datumRodjenja + '\'' +
+                ", opis='" + opis + '\'' +
+                ", uloga='" + uloga + '\'' +
+                '}';
     }
 }

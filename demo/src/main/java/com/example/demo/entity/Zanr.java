@@ -5,8 +5,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.io.Serializable;
+
 @Entity
-public class Zanr {
+public class Zanr implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
@@ -26,5 +28,13 @@ public class Zanr {
 
     public void setNaziv(String naziv) {
         this.naziv = naziv;
+    }
+
+    @Override
+    public String toString() {
+        return "Zanr{" +
+                "Id=" + Id +
+                ", naziv='" + naziv + '\'' +
+                '}';
     }
 }

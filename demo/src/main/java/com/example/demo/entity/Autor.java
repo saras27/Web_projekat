@@ -1,16 +1,16 @@
-package com.example.demo.entity;
+/*package com.example.demo.entity;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-public class Autor extends Korisnik{
+public class Autor extends Korisnik implements Serializable {
     @Column
     private boolean aktivan;
-    @ManyToMany
-    @JoinTable(name = "Knjige", joinColumns = @JoinColumn(name = "autor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "knjiga_id", referencedColumnName = "id"))
+    @OneToMany(mappedBy = "autor",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Knjiga> knjige = new HashSet<>();
 
     public boolean isAktivan() {
@@ -28,4 +28,12 @@ public class Autor extends Korisnik{
     public void setKnjige(Set<Knjiga> knjige) {
         this.knjige = knjige;
     }
-}
+
+    @Override
+    public String toString() {
+        return "Autor{" +
+                "aktivan=" + aktivan +
+                ", knjige=" + knjige +
+                '}';
+    }
+}*/

@@ -2,12 +2,13 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-public class StavkaPolice {
+public class StavkaPolice implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
@@ -38,5 +39,14 @@ public class StavkaPolice {
 
     public void setKnjiga(Knjiga knjiga) {
         this.knjiga = knjiga;
+    }
+
+    @Override
+    public String toString() {
+        return "StavkaPolice{" +
+                "Id=" + Id +
+                ", recenzije=" + recenzije +
+                ", knjiga=" + knjiga +
+                '}';
     }
 }

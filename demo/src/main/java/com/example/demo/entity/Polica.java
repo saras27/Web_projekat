@@ -2,11 +2,12 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Polica {
+public class Polica implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
@@ -15,7 +16,9 @@ public class Polica {
     @Column
     private String primarna;
     @ManyToMany
-    @JoinTable(name = "StavkePolice", joinColumns = @JoinColumn(name = "polica_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "stavkaPolice_id", referencedColumnName = "id"))
+    @JoinTable(name = "stavkePolice",
+            joinColumns = @JoinColumn(name = "polica_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "stavka_police_id", referencedColumnName = "id"))
     private Set<StavkaPolice> stavkePolice = new HashSet<>();
 
     public Long getId() {
@@ -48,5 +51,15 @@ public class Polica {
 
     public void setStavkePolice(Set<StavkaPolice> stavkePolice) {
         this.stavkePolice = stavkePolice;
+    }
+
+    @Override
+    public String toString() {
+        return "Polica{" +
+                "Id=" + Id +
+                ", naziv='" + naziv + '\'' +
+                ", primarna='" + primarna + '\'' +
+                ", stavkePolice=" + stavkePolice +
+                '}';
     }
 }

@@ -2,8 +2,10 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
-public class ZahtevZaAktivaciju {
+public class ZahtevZaAktivaciju implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
@@ -64,5 +66,17 @@ public class ZahtevZaAktivaciju {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "ZahtevZaAktivaciju{" +
+                "Id=" + Id +
+                ", email='" + email + '\'' +
+                ", telefon='" + telefon + '\'' +
+                ", poruka='" + poruka + '\'' +
+                ", datum='" + datum + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

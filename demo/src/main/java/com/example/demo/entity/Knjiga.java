@@ -2,27 +2,32 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
-public class Knjiga {
+public class Knjiga implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     @Column
     private String naslov;
-    @Column
+    @Column(name = "naslovna_fotografija")
     private String naslovnaFotografija;
     @Column
     private String ISBN;
-    @Column
+    @Column(name = "datum_objavljivanja")
     private String datumObjavljivanja;
-    @Column
+    @Column(name = "broj_strana")
     private int brojStrana;
     @Column
     private String opis;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "knjige",
+            joinColumns = @JoinColumn(name = "knjiga_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "zanr_id", referencedColumnName = "id"))
     private Zanr zanr;
     @Column
-    private double ocena;
+    private int ocena;
 
     public Long getId() {
         return Id;
@@ -88,11 +93,26 @@ public class Knjiga {
         this.zanr = zanr;
     }
 
-    public double getOcena() {
+    public int getOcena() {
         return ocena;
     }
 
-    public void setOcena(double ocena) {
+    public void setOcena(int ocena) {
         this.ocena = ocena;
+    }
+
+    @Override
+    public String toString() {
+        return "Knjiga{" +
+                "Id=" + Id +
+                ", naslov='" + naslov + '\'' +
+                ", naslovnaFotografija='" + naslovnaFotografija + '\'' +
+                ", ISBN='" + ISBN + '\'' +
+                ", datumObjavljivanja='" + datumObjavljivanja + '\'' +
+                ", brojStrana=" + brojStrana +
+                ", opis='" + opis + '\'' +
+                ", zanr=" + zanr +
+                ", ocena=" + ocena +
+                '}';
     }
 }

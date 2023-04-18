@@ -2,16 +2,18 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
-public class Recenzija {
+public class Recenzija implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     @Column
-    private double ocena;
+    private int ocena;
     @Column
     private String tekst;
-    @Column
+    @Column(name = "datum_recenzije")
     private String datumRecenzije;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Korisnik korisnik;
@@ -24,11 +26,11 @@ public class Recenzija {
         Id = id;
     }
 
-    public double getOcena() {
+    public int getOcena() {
         return ocena;
     }
 
-    public void setOcena(double ocena) {
+    public void setOcena(int ocena) {
         this.ocena = ocena;
     }
 
@@ -54,5 +56,16 @@ public class Recenzija {
 
     public void setKorisnik(Korisnik korisnik) {
         this.korisnik = korisnik;
+    }
+
+    @Override
+    public String toString() {
+        return "Recenzija{" +
+                "Id=" + Id +
+                ", ocena=" + ocena +
+                ", tekst='" + tekst + '\'' +
+                ", datumRecenzije='" + datumRecenzije + '\'' +
+                ", korisnik=" + korisnik +
+                '}';
     }
 }
