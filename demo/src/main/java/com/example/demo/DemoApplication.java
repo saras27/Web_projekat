@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.entity.Recenzija;
+import com.example.demo.entity.StavkaPolice;
 import com.example.demo.repository.RecenzijaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -27,9 +28,17 @@ public class DemoApplication implements CommandLineRunner {
 
 		// kreiramo novi objekat klase Employee
 		Recenzija recenzija = new Recenzija();
-		recenzija.setOcena(9);
-		recenzija.setTekst("super!");
-		recenzija.setDatumRecenzije("25.3.2021.");
+		recenzija.setOcena(5);
+		recenzija.setTekst("lepo!");
+		recenzija.setDatumRecenzije("6.2.2016.");
+		/*stavka.setNaslovnaFotografija(" ");
+		knjiga.setISBN("2643581");
+		knjiga.setDatumObjavljivanja("26.5.2001.");
+		knjiga.setBrojStrana(256);
+		knjiga.setOpis("divno!");
+		knjiga.setOcena(9);*/
+		/*recenzija.setTekst("super!");
+		recenzija.setDatumRecenzije("25.3.2021.");*/
 
 
 		// čuvamo objekat u bazi

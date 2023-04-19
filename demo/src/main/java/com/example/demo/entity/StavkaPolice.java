@@ -1,51 +1,43 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 public class StavkaPolice implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    @OneToMany(mappedBy = "stavkaPolice", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "stavka_id")
     private Set<Recenzija> recenzije = new HashSet<>();
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Knjiga knjiga;
-
-    public Long getId() {
-        return Id;
-    }
 
     public void setId(Long id) {
         Id = id;
     }
 
-    public Set<Recenzija> getRecenzije() {
-        return recenzije;
-    }
-
-    public void setRecenzije(Set<Recenzija> recenzije) {
-        this.recenzije = recenzije;
-    }
-
-    public Knjiga getKnjiga() {
-        return knjiga;
+    public Long getId() {
+        return Id;
     }
 
     public void setKnjiga(Knjiga knjiga) {
         this.knjiga = knjiga;
     }
 
+    public Knjiga getKnjiga() {
+        return knjiga;
+    }
+
     @Override
     public String toString() {
-        return "StavkaPolice{" +
+        return "Stavka{" +
                 "Id=" + Id +
-                ", recenzije=" + recenzije +
                 ", knjiga=" + knjiga +
                 '}';
     }

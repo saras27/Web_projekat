@@ -1,7 +1,10 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -15,6 +18,8 @@ public class Recenzija implements Serializable {
     private String tekst;
     @Column(name = "datum_recenzije")
     private String datumRecenzije;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private StavkaPolice stavka;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Korisnik korisnik;
 
@@ -22,28 +27,28 @@ public class Recenzija implements Serializable {
         return Id;
     }
 
-    public void setId(Long id) {
-        Id = id;
-    }
-
     public int getOcena() {
         return ocena;
-    }
-
-    public void setOcena(int ocena) {
-        this.ocena = ocena;
     }
 
     public String getTekst() {
         return tekst;
     }
 
-    public void setTekst(String tekst) {
-        this.tekst = tekst;
-    }
-
     public String getDatumRecenzije() {
         return datumRecenzije;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
+    public void setOcena(int ocena) {
+        this.ocena = ocena;
+    }
+
+    public void setTekst(String tekst) {
+        this.tekst = tekst;
     }
 
     public void setDatumRecenzije(String datumRecenzije) {
@@ -65,6 +70,7 @@ public class Recenzija implements Serializable {
                 ", ocena=" + ocena +
                 ", tekst='" + tekst + '\'' +
                 ", datumRecenzije='" + datumRecenzije + '\'' +
+                ", stavka=" + stavka +
                 ", korisnik=" + korisnik +
                 '}';
     }

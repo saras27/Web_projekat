@@ -1,7 +1,10 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -24,44 +27,44 @@ public class ZahtevZaAktivaciju implements Serializable {
         return Id;
     }
 
-    public void setId(Long id) {
-        Id = id;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getTelefon() {
         return telefon;
     }
 
-    public void setTelefon(String telefon) {
-        this.telefon = telefon;
-    }
-
     public String getPoruka() {
         return poruka;
-    }
-
-    public void setPoruka(String poruka) {
-        this.poruka = poruka;
     }
 
     public String getDatum() {
         return datum;
     }
 
-    public void setDatum(String datum) {
-        this.datum = datum;
-    }
-
     public String getStatus() {
         return status;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setTelefon(String telefon) {
+        this.telefon = telefon;
+    }
+
+    public void setPoruka(String poruka) {
+        this.poruka = poruka;
+    }
+
+    public void setDatum(String datum) {
+        this.datum = datum;
     }
 
     public void setStatus(String status) {
@@ -70,7 +73,7 @@ public class ZahtevZaAktivaciju implements Serializable {
 
     @Override
     public String toString() {
-        return "ZahtevZaAktivaciju{" +
+        return "Zahtev{" +
                 "Id=" + Id +
                 ", email='" + email + '\'' +
                 ", telefon='" + telefon + '\'' +

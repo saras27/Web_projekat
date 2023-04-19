@@ -1,7 +1,10 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -21,11 +24,11 @@ public class Knjiga implements Serializable {
     private int brojStrana;
     @Column
     private String opis;
-    @ManyToMany
-    @JoinTable(name = "knjige",
-            joinColumns = @JoinColumn(name = "knjiga_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "zanr_id", referencedColumnName = "id"))
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "zanr_id")
     private Zanr zanr;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Autor autor;
     @Column
     private int ocena;
 
@@ -85,12 +88,12 @@ public class Knjiga implements Serializable {
         this.opis = opis;
     }
 
-    public Zanr getZanr() {
-        return zanr;
-    }
-
     public void setZanr(Zanr zanr) {
         this.zanr = zanr;
+    }
+
+    public Zanr getZanr() {
+        return zanr;
     }
 
     public int getOcena() {
@@ -111,8 +114,9 @@ public class Knjiga implements Serializable {
                 ", datumObjavljivanja='" + datumObjavljivanja + '\'' +
                 ", brojStrana=" + brojStrana +
                 ", opis='" + opis + '\'' +
-                ", zanr=" + zanr +
                 ", ocena=" + ocena +
+                ", autor=" + autor +
+                ", zanr=" + zanr +
                 '}';
     }
 }

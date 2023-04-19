@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,75 +28,72 @@ public class Korisnik implements Serializable {
     @Column
     private String uloga;
 
-    @OneToMany
-    private Set<Knjiga> knjiga = new HashSet<>();
-
     public Long getId() {
         return Id;
-    }
-
-    public void setId(Long id) {
-        Id = id;
     }
 
     public String getIme() {
         return ime;
     }
 
-    public void setIme(String ime) {
-        this.ime = ime;
-    }
-
     public String getPrezime() {
         return prezime;
-    }
-
-    public void setPrezime(String prezime) {
-        this.prezime = prezime;
     }
 
     public String getKorisnickoIme() {
         return korisnickoIme;
     }
 
-    public void setKorisnickoIme(String korisnickoIme) {
-        this.korisnickoIme = korisnickoIme;
-    }
-
     public String getMejlAdresa() {
         return mejlAdresa;
-    }
-
-    public void setMejlAdresa(String mejlAdresa) {
-        this.mejlAdresa = mejlAdresa;
     }
 
     public String getLozinka() {
         return lozinka;
     }
 
-    public void setLozinka(String lozinka) {
-        this.lozinka = lozinka;
-    }
-
     public String getDatumRodjenja() {
         return datumRodjenja;
-    }
-
-    public void setDatumRodjenja(String datumRodjenja) {
-        this.datumRodjenja = datumRodjenja;
     }
 
     public String getOpis() {
         return opis;
     }
 
-    public void setOpis(String opis) {
-        this.opis = opis;
-    }
-
     public String getUloga() {
         return uloga;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
+    public void setIme(String ime) {
+        this.ime = ime;
+    }
+
+    public void setPrezime(String prezime) {
+        this.prezime = prezime;
+    }
+
+    public void setKorisnickoIme(String korisnickoIme) {
+        this.korisnickoIme = korisnickoIme;
+    }
+
+    public void setMejlAdresa(String mejlAdresa) {
+        this.mejlAdresa = mejlAdresa;
+    }
+
+    public void setLozinka(String lozinka) {
+        this.lozinka = lozinka;
+    }
+
+    public void setDatumRodjenja(String datumRodjenja) {
+        this.datumRodjenja = datumRodjenja;
+    }
+
+    public void setOpis(String opis) {
+        this.opis = opis;
     }
 
     public void setUloga(String uloga) {
