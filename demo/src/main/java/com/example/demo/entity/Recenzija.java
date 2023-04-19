@@ -13,7 +13,7 @@ public class Recenzija implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     @Column
-    private int ocena;
+    private double ocena;
     @Column
     private String tekst;
     @Column(name = "datum_recenzije")
@@ -27,7 +27,7 @@ public class Recenzija implements Serializable {
         return Id;
     }
 
-    public int getOcena() {
+    public double getOcena() {
         return ocena;
     }
 
@@ -43,7 +43,7 @@ public class Recenzija implements Serializable {
         Id = id;
     }
 
-    public void setOcena(int ocena) {
+    public void setOcena(double ocena) {
         this.ocena = ocena;
     }
 

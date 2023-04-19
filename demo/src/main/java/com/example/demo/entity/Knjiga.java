@@ -30,7 +30,7 @@ public class Knjiga implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Autor autor;
     @Column
-    private int ocena;
+    private double ocena;
 
     public Long getId() {
         return Id;
@@ -96,11 +96,11 @@ public class Knjiga implements Serializable {
         return zanr;
     }
 
-    public int getOcena() {
+    public double getOcena() {
         return ocena;
     }
 
-    public void setOcena(int ocena) {
+    public void setOcena(double ocena) {
         this.ocena = ocena;
     }
 
