@@ -45,3 +45,4 @@ public class StavkaPolice implements Serializable {
                 '}';
     }
 }
+

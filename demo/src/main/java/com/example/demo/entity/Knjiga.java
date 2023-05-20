@@ -65,11 +65,11 @@ public class Knjiga implements Serializable {
         this.ISBN = ISBN;
     }
 
-    public String getDatumObjavljivanja() {
+    public LocalDate getDatumObjavljivanja() {
         return datumObjavljivanja;
     }
 
-    public void setDatumObjavljivanja(String datumObjavljivanja) {
+    public void setDatumObjavljivanja(LocalDate datumObjavljivanja) {
         this.datumObjavljivanja = datumObjavljivanja;
     }
 

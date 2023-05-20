@@ -57,7 +57,7 @@ public class Korisnik implements Serializable {
         return lozinka;
     }
 
-    public String getDatumRodjenja() {
+    public LocalDate getDatumRodjenja() {
         return datumRodjenja;
     }
 
@@ -93,7 +93,7 @@ public class Korisnik implements Serializable {
         this.lozinka = lozinka;
     }
 
-    public void setDatumRodjenja(String datumRodjenja) {
+    public void setDatumRodjenja(LocalDate datumRodjenja) {
         this.datumRodjenja = datumRodjenja;
     }
 
