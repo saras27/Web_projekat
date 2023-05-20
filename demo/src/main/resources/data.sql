@@ -15,4 +15,3 @@ INSERT INTO POLICA(naziv, primarna) VALUES('prva', 'jeste');
 INSERT INTO ZAHTEV_ZA_AKTIVACIJU(email, telefon, poruka, datum, status) VALUES('joca@gmail.com', '062456678', 'Zahtev za autora', '6.6.2021.', 'na cekanju');
 
 INSERT INTO POLICE_STAVKE(stavka_id, polica_id) VALUES(1, 1);
-
