@@ -15,7 +15,7 @@ public class Polica implements Serializable {
     @Column
     private String naziv;
     @Column
-    private String primarna;
+    private boolean primarna;
     @ManyToMany
     @JoinTable(name = "police_stavke",
             joinColumns = @JoinColumn(name = "polica_id", referencedColumnName = "id"),

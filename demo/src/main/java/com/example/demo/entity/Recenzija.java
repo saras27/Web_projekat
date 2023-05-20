@@ -22,6 +22,7 @@ public class Recenzija implements Serializable {
     private StavkaPolice stavka;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Korisnik korisnik;
+    //many to one
 
     public Long getId() {
         return Id;

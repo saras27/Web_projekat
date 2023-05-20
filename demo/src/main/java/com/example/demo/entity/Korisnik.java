@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,14 +16,18 @@ public class Korisnik implements Serializable {
     private String ime;
     @Column
     private String prezime;
-    @Column(name = "korisnicko_ime")
+    @Column(name = "korisnicko_ime", unique = true)
     private String korisnickoIme;
-    @Column(name = "mejl_adresa")
+    @Column(name = "mejl_adresa", unique = true)
     private String mejlAdresa;
     @Column
     private String lozinka;
     @Column(name = "datum_rodjenja")
-    private String datumRodjenja;
+    private LocalDate datumRodjenja;
+
+    //string slika
+
+    //dodaj listu polica korisnika
     @Column
     private String opis;
     @Column

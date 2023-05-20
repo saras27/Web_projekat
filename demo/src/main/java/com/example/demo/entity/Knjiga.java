@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -16,10 +17,10 @@ public class Knjiga implements Serializable {
     private String naslov;
     @Column(name = "naslovna_fotografija")
     private String naslovnaFotografija;
-    @Column
+    @Column(unique = true)
     private String ISBN;
     @Column(name = "datum_objavljivanja")
-    private String datumObjavljivanja;
+    private LocalDate datumObjavljivanja;
     @Column(name = "broj_strana")
     private int brojStrana;
     @Column
