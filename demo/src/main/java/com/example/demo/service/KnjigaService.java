@@ -13,13 +13,13 @@ public class KnjigaService {
     @Autowired
     private KnjigaRepository knjigaRepository;
 
-    /*public Knjiga findKnjigu(String naslov){
-        Optional<Knjiga> foundKnjiga = knjigaRepository.getByNaslov(naslov);
+    public Knjiga findKnjigu(String naslov){
+        Optional<Knjiga> foundKnjiga = Optional.ofNullable(knjigaRepository.getByNaslov(naslov));
         if (foundKnjiga.isPresent())
             return foundKnjiga.get();
 
         return null;
-    }*/
+    }
 
     public List<Knjiga> findAll(){
         return knjigaRepository.findAll();

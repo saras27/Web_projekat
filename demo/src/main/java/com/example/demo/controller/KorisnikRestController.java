@@ -73,13 +73,13 @@ public class KorisnikRestController {
         return ResponseEntity.ok(dtos);
     }
 
-    /*@GetMapping("/api/employees/{id}")
-    public Employee getEmployee(@PathVariable(name = "id") Long id, HttpSession session){
-        Employee employee = (Employee) session.getAttribute("user");
-        System.out.println(employee.getFirstname());
+    @GetMapping("/api/knjige/{naslov}")
+    public Knjiga getKnjiga(@PathVariable(name = "naslov") String naslov, HttpSession session){
+        Knjiga knjiga = (Knjiga) session.getAttribute("user");
+        System.out.println(knjiga.getNaslov());
         session.invalidate();
-        return employeeService.findOne(id);
-    }*/
+        return knjigaService.findKnjigu(naslov);
+    }
 
    /* @PostMapping("/api/save-employee")
     public String saveEmployee(@RequestBody Employee employee) {
