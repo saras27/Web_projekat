@@ -1,12 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Korisnik;
+import com.example.demo.service.KnjigaService;
 import com.example.demo.service.KorisnikService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.dto.LoginDto;
+import com.example.demo.dto.KnjigaDto;
 
 
 import javax.servlet.http.HttpSession;
@@ -18,6 +21,8 @@ public class KorisnikRestController {
 
     @Autowired
     private KorisnikService korisnikService;
+    @Autowired
+    private KnjigaService knjigaService;
 
     @GetMapping("/api/")
     public String welcome(){
@@ -47,36 +52,36 @@ public class KorisnikRestController {
 
         session.invalidate();
         return new ResponseEntity("Successfully logged out", HttpStatus.OK);
-    }
+    }*/
 
-    @GetMapping("/api/employees")
-    public ResponseEntity<List<EmployeeDto>> getEmployees(HttpSession session){
-        List<Employee> employeeList = employeeService.findAll();
+    @GetMapping("/api/knjige")
+    public ResponseEntity<List<KnjigaDto>> getKnjige(HttpSession session){
+        List<Knjiga> knjige = knjigaService.findAll();
 
-        Employee loggedEmployee = (Employee) session.getAttribute("employee");
-        if(loggedEmployee == null) {
+        Knjiga nadjidKnjigu = (Knjiga) session.getAttribute("knjiga");
+        if(nadjidKnjigu == null) {
             System.out.println("Nema sesije");
         } else {
-            System.out.println(loggedEmployee);
+            System.out.println(nadjidKnjigu);
         }
 
-        List<EmployeeDto> dtos = new ArrayList<>();
-        for(Employee employee : employeeList){
-            EmployeeDto dto = new EmployeeDto(employee);
+        List<KnjigaDto> dtos = new ArrayList<>();
+        for(Knjiga knjiga : knjige){
+            KnjigaDto dto = new KnjigaDto(knjiga);
             dtos.add(dto);
         }
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/api/employees/{id}")
+    /*@GetMapping("/api/employees/{id}")
     public Employee getEmployee(@PathVariable(name = "id") Long id, HttpSession session){
         Employee employee = (Employee) session.getAttribute("user");
         System.out.println(employee.getFirstname());
         session.invalidate();
         return employeeService.findOne(id);
-    }
+    }*/
 
-    @PostMapping("/api/save-employee")
+   /* @PostMapping("/api/save-employee")
     public String saveEmployee(@RequestBody Employee employee) {
         this.employeeService.save(employee);
         return "Successfully saved an employee!";

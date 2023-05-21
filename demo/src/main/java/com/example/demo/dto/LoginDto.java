@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 public class LoginDto {
+    private Long Id;
     private String korisnickoIme;
 
     /*private String password;*/
@@ -11,6 +12,14 @@ public class LoginDto {
     public LoginDto(String korisnickoIme) {
         this.korisnickoIme = korisnickoIme;
         //this.password = password;
+    }
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
     }
 
     public String getKorisnickoIme() {

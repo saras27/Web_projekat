@@ -1,38 +1,50 @@
-package com.example.demo.entity;
+package com.example.demo.dto;
+
+import com.example.demo.entity.Autor;
+import com.example.demo.entity.Knjiga;
+import com.example.demo.entity.Zanr;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.*;
-import java.io.Serializable;
 
-@Entity
-public class Knjiga implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class KnjigaDto {
     private Long Id;
-    @Column
     private String naslov;
-    @Column(name = "naslovna_fotografija")
     private String naslovnaFotografija;
-    @Column(unique = true)
     private String ISBN;
-    @Column(name = "datum_objavljivanja")
     private LocalDate datumObjavljivanja;
-    @Column(name = "broj_strana")
     private int brojStrana;
-    @Column
     private String opis;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "zanr_id")
     private Zanr zanr;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Autor autor;
-    @Column
     private double ocena;
-
+    public KnjigaDto(){
+    }
+    public KnjigaDto(Long Id, String naslov, String naslovnaFotografija, String ISBN, LocalDate
+                     datumObjavljivanja, int brStr, String opis, Zanr zanr, Autor autor, double ocena){
+        this.Id = Id;
+        this.naslov = naslov;
+        this.naslovnaFotografija = naslovnaFotografija;
+        this.ISBN = ISBN;
+        this.datumObjavljivanja = datumObjavljivanja;
+        this.brojStrana = brStr;
+        this.opis = opis;
+        this.zanr = zanr;
+        this.autor = autor;
+        this.ocena = ocena;
+    }
+    public KnjigaDto(Knjiga knjiga){
+        this.Id = knjiga.getId();
+        this.naslov = knjiga.getNaslov();
+        this.naslovnaFotografija = knjiga.getNaslovnaFotografija();
+        this.ISBN = knjiga.getISBN();
+        this.datumObjavljivanja = knjiga.getDatumObjavljivanja();
+        this.brojStrana = knjiga.getBrojStrana();
+        this.opis = knjiga.getOpis();
+        this.zanr = knjiga.getZanr();
+        this.autor = knjiga.getAutor();
+        this.ocena = knjiga.getOcena();
+    }
     public Long getId() {
         return Id;
     }
@@ -103,29 +115,5 @@ public class Knjiga implements Serializable {
 
     public void setOcena(double ocena) {
         this.ocena = ocena;
-    }
-
-    public Autor getAutor() {
-        return autor;
-    }
-
-    public void setAutor(Autor autor) {
-        this.autor = autor;
-    }
-
-    @Override
-    public String toString() {
-        return "Knjiga{" +
-                "Id=" + Id +
-                ", naslov='" + naslov + '\'' +
-                ", naslovnaFotografija='" + naslovnaFotografija + '\'' +
-                ", ISBN='" + ISBN + '\'' +
-                ", datumObjavljivanja='" + datumObjavljivanja + '\'' +
-                ", brojStrana=" + brojStrana +
-                ", opis='" + opis + '\'' +
-                ", ocena=" + ocena +
-                ", autor=" + autor +
-                ", zanr=" + zanr +
-                '}';
     }
 }
