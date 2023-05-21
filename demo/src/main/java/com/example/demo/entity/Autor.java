@@ -13,6 +13,8 @@ public class Autor extends Korisnik implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "autor_id")
     private Set<Knjiga> knjige = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private ZahtevZaAktivaciju zahtev;
 
     /*@Override
     public Long getId() {

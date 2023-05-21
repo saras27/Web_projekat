@@ -22,6 +22,8 @@ public class ZahtevZaAktivaciju implements Serializable {
     private String datum;
     @Column
     private String status;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Autor autor;
 
     public Long getId() {
         return Id;

@@ -24,6 +24,9 @@ public class Korisnik implements Serializable {
     private String lozinka;
     @Column(name = "datum_rodjenja")
     private LocalDate datumRodjenja;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "korisnik_id")
+    private Set<Polica> police = new HashSet<>();
 
     //string slika
 
