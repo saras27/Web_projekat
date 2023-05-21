@@ -6,6 +6,12 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+enum Uloga {
+    CITALAC,
+    AUTOR,
+    ADMINISTRATOR
+}
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Korisnik implements Serializable {
@@ -27,14 +33,18 @@ public class Korisnik implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "korisnik_id")
     private Set<Polica> police = new HashSet<>();
-
+    //dodaj listu polica korisnika
+    @Column(name = "slika")
+    private String slika;
     //string slika
 
-    //dodaj listu polica korisnika
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private  Set<Recenzija> recenzije = new HashSet<>();
+
     @Column
     private String opis;
     @Column
-    private String uloga;
+    private Uloga uloga;
 
     public Long getId() {
         return Id;
@@ -68,7 +78,7 @@ public class Korisnik implements Serializable {
         return opis;
     }
 
-    public String getUloga() {
+    public Uloga getUloga() {
         return uloga;
     }
 
@@ -104,7 +114,7 @@ public class Korisnik implements Serializable {
         this.opis = opis;
     }
 
-    public void setUloga(String uloga) {
+    public void setUloga(Uloga uloga) {
         this.uloga = uloga;
     }
 

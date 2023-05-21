@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -19,7 +20,7 @@ public class ZahtevZaAktivaciju implements Serializable {
     @Column
     private String poruka;
     @Column
-    private String datum;
+    private LocalDate datum;
     @Column
     private String status;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -41,7 +42,7 @@ public class ZahtevZaAktivaciju implements Serializable {
         return poruka;
     }
 
-    public String getDatum() {
+    public LocalDate getDatum() {
         return datum;
     }
 
@@ -65,7 +66,7 @@ public class ZahtevZaAktivaciju implements Serializable {
         this.poruka = poruka;
     }
 
-    public void setDatum(String datum) {
+    public void setDatum(LocalDate datum) {
         this.datum = datum;
     }
 

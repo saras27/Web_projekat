@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -17,10 +18,10 @@ public class Recenzija implements Serializable {
     @Column
     private String tekst;
     @Column(name = "datum_recenzije")
-    private String datumRecenzije;
+    private LocalDate datumRecenzije;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private StavkaPolice stavka;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Korisnik korisnik;
     //many to one
 
@@ -36,7 +37,7 @@ public class Recenzija implements Serializable {
         return tekst;
     }
 
-    public String getDatumRecenzije() {
+    public LocalDate getDatumRecenzije() {
         return datumRecenzije;
     }
 
@@ -52,7 +53,7 @@ public class Recenzija implements Serializable {
         this.tekst = tekst;
     }
 
-    public void setDatumRecenzije(String datumRecenzije) {
+    public void setDatumRecenzije(LocalDate datumRecenzije) {
         this.datumRecenzije = datumRecenzije;
     }
 

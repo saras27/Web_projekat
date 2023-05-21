@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 /*
@@ -30,7 +32,7 @@ public class DemoApplication implements CommandLineRunner {
 		Recenzija recenzija = new Recenzija();
 		recenzija.setOcena(5);
 		recenzija.setTekst("lepo!");
-		recenzija.setDatumRecenzije("6.2.2016.");
+		recenzija.setDatumRecenzije(LocalDate.ofEpochDay(2016-02-26));
 		/*stavka.setNaslovnaFotografija(" ");
 		knjiga.setISBN("2643581");
 		knjiga.setDatumObjavljivanja("26.5.2001.");
