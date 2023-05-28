@@ -21,6 +21,13 @@ public class KorisnikService {
 
         return null;
     }
+    public Korisnik nadjiKorisnik(String KorisnickoIme){
+        Optional<Korisnik> foundKorisnik = Optional.ofNullable(korisnikRepository.getByKorisnickoIme(KorisnickoIme));
+        if (foundKorisnik.isPresent())
+            return foundKorisnik.get();
+
+        return null;
+    }
 
     public List<Korisnik> findAll(){
         return korisnikRepository.findAll();

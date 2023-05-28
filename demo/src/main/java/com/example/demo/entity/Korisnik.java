@@ -118,6 +118,15 @@ public class Korisnik implements Serializable {
         this.uloga = uloga;
     }
 
+    public Set<Polica> getPolice() {
+        return police;
+    }
+
+    public Set<Recenzija> getRecenzije() {
+        return recenzije;
+    }
+
+
     @Override
     public String toString() {
         return "Korisnik{" +
@@ -125,11 +134,10 @@ public class Korisnik implements Serializable {
                 ", ime='" + ime + '\'' +
                 ", prezime='" + prezime + '\'' +
                 ", korisnickoIme='" + korisnickoIme + '\'' +
-                ", mejlAdresa='" + mejlAdresa + '\'' +
-                ", lozinka='" + lozinka + '\'' +
                 ", datumRodjenja='" + datumRodjenja + '\'' +
                 ", opis='" + opis + '\'' +
                 ", uloga='" + uloga + '\'' +
+                ", police= " + police +
                 '}';
     }
 }

@@ -21,8 +21,6 @@ public class KorisnikRestController {
 
     @Autowired
     private KorisnikService korisnikService;
-    @Autowired
-    private KnjigaService knjigaService;
 
     @GetMapping("/api/")
     public String welcome(){
@@ -42,6 +40,13 @@ public class KorisnikRestController {
         session.setAttribute("employee", loggedKorisnik);
         return ResponseEntity.ok("Successfully logged in!");
     }
+    @GetMapping("/api/{KorisnickoIme}")
+    public Korisnik getKorisnik(@PathVariable(name = "KorisnickoIme") String naslov, HttpSession session){
+        Korisnik korisnik = (Korisnik) session.getAttribute("KorisnickoIme");
+        System.out.println(korisnik);
+        session.invalidate();
+        return korisnikService.nadjiKorisnik(korisnik.getKorisnickoIme());
+    }
 
     /*@PostMapping("api/logout")
     public ResponseEntity Logout(HttpSession session){
@@ -54,32 +59,7 @@ public class KorisnikRestController {
         return new ResponseEntity("Successfully logged out", HttpStatus.OK);
     }*/
 
-    @GetMapping("/api/knjige")
-    public ResponseEntity<List<KnjigaDto>> getKnjige(HttpSession session){
-        List<Knjiga> knjige = knjigaService.findAll();
 
-        Knjiga nadjidKnjigu = (Knjiga) session.getAttribute("knjiga");
-        if(nadjidKnjigu == null) {
-            System.out.println("Nema sesije");
-        } else {
-            System.out.println(nadjidKnjigu);
-        }
-
-        List<KnjigaDto> dtos = new ArrayList<>();
-        for(Knjiga knjiga : knjige){
-            KnjigaDto dto = new KnjigaDto(knjiga);
-            dtos.add(dto);
-        }
-        return ResponseEntity.ok(dtos);
-    }
-
-    @GetMapping("/api/knjige/{naslov}")
-    public Knjiga getKnjiga(@PathVariable(name = "naslov") String naslov, HttpSession session){
-        Knjiga knjiga = (Knjiga) session.getAttribute("user");
-        System.out.println(knjiga.getNaslov());
-        session.invalidate();
-        return knjigaService.findKnjigu(naslov);
-    }
 
    /* @PostMapping("/api/save-employee")
     public String saveEmployee(@RequestBody Employee employee) {
