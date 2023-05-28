@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.RegistracijaDto;
 import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Korisnik;
 import com.example.demo.service.KnjigaService;
@@ -13,8 +14,10 @@ import com.example.demo.dto.KnjigaDto;
 
 
 import javax.servlet.http.HttpSession;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 @RestController
 public class KorisnikRestController {
@@ -47,6 +50,49 @@ public class KorisnikRestController {
         session.invalidate();
         return korisnikService.nadjiKorisnik(korisnik.getKorisnickoIme());
     }
+    @PostMapping("api/registracija")
+    public ResponseEntity<String> registracija(@RequestBody RegistracijaDto registracijaDto, HttpSession session) {
+        if(registracijaDto.getKorisnickoIme().isEmpty() || registracijaDto.getIme().isEmpty() ||
+                registracijaDto.getPrezime().isEmpty() || registracijaDto.getMejl().isEmpty() ||
+                registracijaDto.getLozinka().isEmpty())
+            return new ResponseEntity("Neispravni podaci za registraciju", HttpStatus.BAD_REQUEST);
+
+
+        Scanner in1 = new Scanner(System.in);
+        String ime = in1.nextLine();
+
+        Scanner in2 = new Scanner(System.in);
+        String prezime = in2.nextLine();
+
+        Scanner in3 = new Scanner(System.in);
+        String korisnickoIme = in3.nextLine();
+
+        Scanner in4 = new Scanner(System.in);
+        String mejl = in4.nextLine();
+
+        Scanner in5 = new Scanner(System.in);
+        String lozinka = in5.nextLine();
+
+        if(registracijaDto.getIme().equals(ime) && registracijaDto.getPrezime().equals(prezime) &&
+                registracijaDto.getKorisnickoIme().equals(korisnickoIme) && registracijaDto.getLozinka().equals(lozinka) &&
+        registracijaDto.getMejl().equals(mejl))
+        {
+            Korisnik registrovanKorisnik = korisnikService.registruj(registracijaDto.getIme(),
+                    registracijaDto.getPrezime(), registracijaDto.getKorisnickoIme(), registracijaDto.getMejl(),
+                    registracijaDto.getLozinka());
+            if(registrovanKorisnik == null)
+                return new ResponseEntity("Vec postoji korisnik sa unetim korisnickim imenom", HttpStatus.BAD_REQUEST);
+            else{
+                //this.korisnikService.save(registrovanKorisnik);
+                session.setAttribute("korisnik", registrovanKorisnik);
+                return ResponseEntity.ok("Uspesno registrovan!");
+            }
+        }
+        else{
+            return new ResponseEntity("Podaci se ne poklapaju", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     /*@PostMapping("api/logout")
     public ResponseEntity Logout(HttpSession session){
