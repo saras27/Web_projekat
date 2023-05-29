@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.RegistracijaDto;
 import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Korisnik;
+import com.example.demo.entity.Polica;
 import com.example.demo.service.KnjigaService;
 import com.example.demo.service.KorisnikService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 @RestController
 public class KorisnikRestController {
@@ -31,17 +33,21 @@ public class KorisnikRestController {
     }
 
     @PostMapping("api/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session){
+    public Set<Polica> login(@RequestBody LoginDto loginDto, HttpSession session){
         // proverimo da li su podaci validni
-        if(loginDto.getKorisnickoIme().isEmpty())
-            return new ResponseEntity("Invalid login data", HttpStatus.BAD_REQUEST);
+        if(loginDto.getKorisnickoIme().isEmpty() || loginDto.getLozinka().isEmpty()) {
+            System.out.println("Invalid login data");
+            return null;
+        }
 
         Korisnik loggedKorisnik = korisnikService.login(loginDto.getKorisnickoIme());
-        if (loggedKorisnik == null)
-            return new ResponseEntity<>("User does not exist!", HttpStatus.NOT_FOUND);
+        if (loggedKorisnik == null){
+            System.out.println("User does not exist!");
+            return null;
+        }
 
-        session.setAttribute("employee", loggedKorisnik);
-        return ResponseEntity.ok("Successfully logged in!");
+        session.setAttribute("korisnik", loggedKorisnik);
+        return loggedKorisnik.getPolice();
     }
     @GetMapping("/api/{KorisnickoIme}")
     public Korisnik getKorisnik(@PathVariable(name = "KorisnickoIme") String naslov, HttpSession session){

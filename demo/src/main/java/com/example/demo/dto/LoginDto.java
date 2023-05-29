@@ -4,14 +4,14 @@ public class LoginDto {
     private Long Id;
     private String korisnickoIme;
 
-    /*private String password;*/
+    private String lozinka;
 
     public LoginDto() {
     }
 
     public LoginDto(String korisnickoIme) {
         this.korisnickoIme = korisnickoIme;
-        //this.password = password;
+        this.lozinka = lozinka;
     }
 
     public Long getId() {
@@ -30,11 +30,11 @@ public class LoginDto {
         this.korisnickoIme = korisnickoIme;
     }
 
-    /*public String getPassword() {
-        return password;
+    public String getLozinka() {
+        return lozinka;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }*/
+    public void setLozinka(String lozinka) {
+        this.lozinka = lozinka;
+    }
 }
