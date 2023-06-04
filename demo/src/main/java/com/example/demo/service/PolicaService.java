@@ -1,12 +1,15 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Korisnik;
+
+import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Polica;
 import com.example.demo.repository.PolicaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
-
+@Service
 public class PolicaService {
 
     @Autowired
@@ -14,17 +17,19 @@ public class PolicaService {
 
     public Polica findOne(String imePolice){
         Optional<Polica> foundPolica = Optional.ofNullable(policaRepository.getPolicaByNaziv(imePolice));
-        if (foundPolica.isPresent())
-            return foundPolica.get();
+        return foundPolica.orElse(null);
 
-        return null;
     }
 
-    public Polica addPolica(String imePolice){
+    public List<Polica> findAll(){return policaRepository.findAll();}
+
+    public Polica save(String imePolice){
         Polica polica = policaRepository.getPolicaByNaziv(imePolice);
-        if(polica != null){
+        if(findOne(imePolice) != null){
             return polica;
-        }else
-            return null;
+        }else {
+
+             return policaRepository.save(imePolice);
+        }
     }
 }

@@ -23,4 +23,44 @@ public class Polica implements Serializable {
     private Set<StavkaPolice> stavke = new HashSet<>();
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Korisnik korisnik;
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
+    public String getNaziv() {
+        return naziv;
+    }
+
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
+    }
+
+    public boolean isPrimarna() {
+        return primarna;
+    }
+
+    public void setPrimarna(boolean primarna) {
+        this.primarna = primarna;
+    }
+
+    public Set<StavkaPolice> getStavke() {
+        return stavke;
+    }
+
+    public void setStavke(Set<StavkaPolice> stavke) {
+        this.stavke = stavke;
+    }
+
+    public Korisnik getKorisnik() {
+        return korisnik;
+    }
+
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
+    }
 }
