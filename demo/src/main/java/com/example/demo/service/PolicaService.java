@@ -26,10 +26,10 @@ public class PolicaService {
     public Polica save(String imePolice){
         Polica polica = policaRepository.getPolicaByNaziv(imePolice);
         if(findOne(imePolice) != null){
-            return polica;
+            return null;
         }else {
-
-             return policaRepository.save(imePolice);
+            Polica polica1 = new Polica(imePolice);
+             return policaRepository.save(polica1);
         }
     }
 }

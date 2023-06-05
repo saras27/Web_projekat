@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -23,6 +25,13 @@ public class Polica implements Serializable {
     private Set<StavkaPolice> stavke = new HashSet<>();
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Korisnik korisnik;
+
+    public Polica() {
+    }
+
+    public Polica(String naziv){
+        this.naziv = naziv;
+    }
 
     public Long getId() {
         return Id;

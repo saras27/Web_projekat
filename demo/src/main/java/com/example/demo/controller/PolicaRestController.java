@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.NovaPolicaDto;
 import com.example.demo.dto.PolicaDto;
 import com.example.demo.entity.Polica;
 import com.example.demo.service.PolicaService;
@@ -26,11 +27,11 @@ public class PolicaRestController {
     private PolicaService policaService;
 
     @PostMapping("/api/newShelf")
-    public ResponseEntity<String> novaPolica(@PathVariable(name = "naziv") String naziv, HttpSession session){
-        if(policaService.findOne(naziv)!= null){
+    public ResponseEntity<String> novaPolica(@RequestBody NovaPolicaDto novaPolicaDto, HttpSession session){
+        if(policaService.findOne(novaPolicaDto.getNaziv())!= null){
             System.out.println("Polica sa ovim imenom vec postoji.");
         }else{
-            Polica addedPolica = policaService.save(naziv);
+            Polica addedPolica = policaService.save(novaPolicaDto.getNaziv());
             return ResponseEntity.ok("Polica uspesno dodata");
         }
         return new ResponseEntity("Neispravni podaci", HttpStatus.BAD_REQUEST);

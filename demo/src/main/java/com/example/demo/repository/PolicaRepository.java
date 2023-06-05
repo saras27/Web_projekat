@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PolicaRepository extends JpaRepository<Polica, Long>{
      Polica getPolicaByNaziv(String naziv);
 
-     Polica save(String naziv);
+
 
 }
 
