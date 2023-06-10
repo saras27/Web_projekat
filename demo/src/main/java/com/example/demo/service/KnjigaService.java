@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Knjiga;
+import com.example.demo.entity.Korisnik;
 import com.example.demo.repository.KnjigaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,9 @@ public class KnjigaService {
 
     public Knjiga save(Knjiga employee){
         return knjigaRepository.save(employee);
+    }
+    public Knjiga azuriranjeKnjige(Knjiga knjiga){
+        return knjigaRepository.save(knjiga);
     }
 
     /*public Knjiga login(String username, String password) {

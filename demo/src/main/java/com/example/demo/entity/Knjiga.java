@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class Knjiga implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     @Column
     private String naslov;
     @Column(name = "naslovna_fotografija")
@@ -37,11 +37,11 @@ public class Knjiga implements Serializable {
     private double ocena;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        id = id;
     }
 
     public String getNaslov() {
@@ -119,7 +119,7 @@ public class Knjiga implements Serializable {
     @Override
     public String toString() {
         return "Knjiga{" +
-                "Id=" + Id +
+                "Id=" + id +
                 ", naslov='" + naslov + '\'' +
                 ", naslovnaFotografija='" + naslovnaFotografija + '\'' +
                 ", ISBN='" + ISBN + '\'' +
