@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.KnjigaDto;
 import com.example.demo.dto.NovaPolicaDto;
 import com.example.demo.dto.PolicaDto;
+import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Polica;
+import com.example.demo.service.KnjigaService;
 import com.example.demo.service.PolicaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,8 @@ import java.util.List;
 public class AutorRestController {
     @Autowired
     private PolicaService policaService;
+    @Autowired
+    private KnjigaService knjigaService;
 
     @PostMapping("/api/dodajPolicuAutor")
     public ResponseEntity<String> novaPolicaAutor(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request/*HttpSession session*/){
@@ -34,6 +39,24 @@ public class AutorRestController {
                 Long id = (Long) session.getAttribute("id");
                 Polica addedPolica = policaService.save(novaPolicaDto.getNaziv(), id);
                 return ResponseEntity.ok("Polica uspesno dodata");
+            }
+            return new ResponseEntity("Neispravni podaci", HttpStatus.BAD_REQUEST);
+        } else{
+            return  new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/api/dodajKnjigu")
+    public ResponseEntity<String> novaKnjiga(@RequestBody KnjigaDto novaKnjigaDto, HttpServletRequest request/*HttpSession session*/){
+        HttpSession session = request.getSession();
+        if(session != null && session.getAttribute("korisnik") != null) {
+            if (knjigaService.findKnjigu(novaKnjigaDto.getNaslov()) != null && novaKnjigaDto.getNaslov() != " ") {
+                System.out.println("Knjiga sa ovim imenom vec postoji ili ste uneli prazan string.");
+            } else {
+                // String korisnickoIme = (String) session.getAttribute("")
+                Long id = (Long) session.getAttribute("id");
+                Knjiga addedKnjiga = knjigaService.save(knjigaService.findKnjigu(novaKnjigaDto.getNaslov()));
+                return ResponseEntity.ok("Knjiga uspesno dodata");
             }
             return new ResponseEntity("Neispravni podaci", HttpStatus.BAD_REQUEST);
         } else{
