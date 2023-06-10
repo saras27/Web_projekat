@@ -46,7 +46,7 @@ public class KorisnikService {
     public Korisnik registruj(String ime, String prezime, String korisnickoIme, String mejl, String lozinka){
         Korisnik korisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
         if(korisnik != null){  //ako ne postoji korisnik sa tim korisnickim imenom, uspesno se registruje
-            return korisnik;
+            return korisnikRepository.save(korisnik);
         }
         else
             return null;

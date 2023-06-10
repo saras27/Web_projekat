@@ -35,7 +35,7 @@ public class Korisnik implements Serializable {
     private Set<Polica> police = new HashSet<>();
     //dodaj listu polica korisnika
     @Column(name = "slika")
-    private String slika;
+    private String slika; 
     //string slika
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

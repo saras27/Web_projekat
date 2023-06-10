@@ -49,6 +49,18 @@ public class KorisnikRestController {
         session.setAttribute("korisnik", loggedKorisnik);
         return loggedKorisnik.getPolice();
     }
+
+    @GetMapping("/check-login")
+    @ResponseBody
+    public boolean checkLogin(HttpSession session) {
+        if (session.getAttribute("user") != null) {
+            // User is logged in
+            return true;
+        } else {
+            // User is not logged in
+            return false;
+        }
+    }
     @GetMapping("/api/{KorisnickoIme}")
     public Korisnik getKorisnik(@PathVariable(name = "KorisnickoIme") String naslov, HttpSession session){
         Korisnik korisnik = (Korisnik) session.getAttribute("KorisnickoIme");
@@ -60,7 +72,7 @@ public class KorisnikRestController {
     public ResponseEntity<String> registracija(@RequestBody RegistracijaDto registracijaDto, HttpSession session) {
         if(registracijaDto.getKorisnickoIme().isEmpty() || registracijaDto.getIme().isEmpty() ||
                 registracijaDto.getPrezime().isEmpty() || registracijaDto.getMejl().isEmpty() ||
-                registracijaDto.getLozinka().isEmpty())
+                registracijaDto.getLozinka().isEmpty() || registracijaDto.getPotvrda_lozinke().isEmpty())
             return new ResponseEntity("Neispravni podaci za registraciju", HttpStatus.BAD_REQUEST);
 
 
@@ -78,10 +90,13 @@ public class KorisnikRestController {
 
         Scanner in5 = new Scanner(System.in);
         String lozinka = in5.nextLine();
+    //lozinka treba da se unese 2 puta radi potvrde
+        Scanner in6 = new Scanner(System.in);
+        String potvrda = in6.nextLine();
 
         if(registracijaDto.getIme().equals(ime) && registracijaDto.getPrezime().equals(prezime) &&
                 registracijaDto.getKorisnickoIme().equals(korisnickoIme) && registracijaDto.getLozinka().equals(lozinka) &&
-        registracijaDto.getMejl().equals(mejl))
+        registracijaDto.getMejl().equals(mejl) && registracijaDto.getPotvrda_lozinke().equals(potvrda) && lozinka.equals(potvrda))
         {
             Korisnik registrovanKorisnik = korisnikService.registruj(registracijaDto.getIme(),
                     registracijaDto.getPrezime(), registracijaDto.getKorisnickoIme(), registracijaDto.getMejl(),
@@ -89,7 +104,7 @@ public class KorisnikRestController {
             if(registrovanKorisnik == null)
                 return new ResponseEntity("Vec postoji korisnik sa unetim korisnickim imenom", HttpStatus.BAD_REQUEST);
             else{
-                //this.korisnikService.save(registrovanKorisnik);
+                this.korisnikService.registruj(registrovanKorisnik.getIme(), registrovanKorisnik.getPrezime(), registrovanKorisnik.getKorisnickoIme(), registrovanKorisnik.getMejlAdresa(), registrovanKorisnik.getLozinka());
                 session.setAttribute("korisnik", registrovanKorisnik);
                 return ResponseEntity.ok("Uspesno registrovan!");
             }
