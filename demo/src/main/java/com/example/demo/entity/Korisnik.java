@@ -35,7 +35,7 @@ public class Korisnik implements Serializable {
     private Set<Polica> police = new HashSet<>();
     //dodaj listu polica korisnika
     @Column(name = "slika")
-    private String slika; 
+    private String slika;
     //string slika
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -68,6 +68,14 @@ public class Korisnik implements Serializable {
 
     public String getLozinka() {
         return lozinka;
+    }
+
+    public String getSlika() {
+        return slika;
+    }
+
+    public void setSlika(String slika) {
+        this.slika = slika;
     }
 
     public LocalDate getDatumRodjenja() {

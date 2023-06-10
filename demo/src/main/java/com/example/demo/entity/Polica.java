@@ -29,8 +29,9 @@ public class Polica implements Serializable {
     public Polica() {
     }
 
-    public Polica(String naziv){
+    public Polica(String naziv, boolean primarna){
         this.naziv = naziv;
+        this.primarna = primarna;
     }
 
     public Long getId() {

@@ -27,14 +27,16 @@ public class PolicaRestController {
     @Autowired
     private PolicaService policaService;
 
-    @PostMapping("/api/newShelf")
+    @PostMapping("/api/dodajPolicu")
     public ResponseEntity<String> novaPolica(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request/*HttpSession session*/){
         HttpSession session = request.getSession();
-        if(session != null && session.getAttribute("user") != null) {
+        if(session != null && session.getAttribute("korisnik") != null) {
             if (policaService.findOne(novaPolicaDto.getNaziv()) != null && novaPolicaDto.getNaziv() != " ") {
                 System.out.println("Polica sa ovim imenom vec postoji ili ste uneli prazan string.");
             } else {
-                Polica addedPolica = policaService.save(novaPolicaDto.getNaziv());
+               // String korisnickoIme = (String) session.getAttribute("")
+                Long id = (Long) session.getAttribute("id");
+                Polica addedPolica = policaService.save(novaPolicaDto.getNaziv(), id);
                 return ResponseEntity.ok("Polica uspesno dodata");
             }
             return new ResponseEntity("Neispravni podaci", HttpStatus.BAD_REQUEST);
@@ -74,4 +76,6 @@ public class PolicaRestController {
             return false;
         }
     }
+
+
 }
