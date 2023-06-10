@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class Polica implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     @Column
     private String naziv;
     @Column
@@ -35,11 +35,11 @@ public class Polica implements Serializable {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        id = id;
     }
 
     public String getNaziv() {

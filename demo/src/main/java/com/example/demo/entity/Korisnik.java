@@ -17,7 +17,7 @@ enum Uloga {
 public class Korisnik implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     @Column
     private String ime;
     @Column
@@ -47,7 +47,7 @@ public class Korisnik implements Serializable {
     private Uloga uloga;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public String getIme() {
@@ -91,7 +91,7 @@ public class Korisnik implements Serializable {
     }
 
     public void setId(Long id) {
-        Id = id;
+        id = id;
     }
 
     public void setIme(String ime) {
@@ -138,7 +138,7 @@ public class Korisnik implements Serializable {
     @Override
     public String toString() {
         return "Korisnik{" +
-                "Id=" + Id +
+                "Id=" + id +
                 ", ime='" + ime + '\'' +
                 ", prezime='" + prezime + '\'' +
                 ", korisnickoIme='" + korisnickoIme + '\'' +
