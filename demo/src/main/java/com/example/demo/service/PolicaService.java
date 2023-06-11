@@ -25,6 +25,13 @@ public class PolicaService {
         return foundPolica.orElse(null);
 
     }
+    public boolean obrisiIzBaze(String naziv){
+        Polica polica = policaRepository.getPolicaByNaziv(naziv);
+
+        if(polica == null)
+            return true;
+        else return false;
+    }
 
     public List<Polica> findAll(){return policaRepository.findAll();}
 

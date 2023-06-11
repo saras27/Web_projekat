@@ -6,6 +6,7 @@ import com.example.demo.entity.Korisnik;
 import com.example.demo.entity.Polica;
 import com.example.demo.repository.KnjigaRepository;
 import com.example.demo.service.KnjigaService;
+import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PolicaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,8 @@ public class AutorRestController {
     private PolicaService policaService;
     @Autowired
     private KnjigaService knjigaService;
+    @Autowired
+    private KorisnikService korisnikService;
     @Autowired
     private KnjigaRepository knjigaRepository;
 
@@ -61,6 +64,27 @@ public class AutorRestController {
         } else{
             return  new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
         }
+    }
+    @DeleteMapping("/api/izbrisiPolicuAutor")
+    public ResponseEntity<String> izbrisiPolicuAutor(@RequestBody PolicaDto policaDto, HttpSession session){
+        Korisnik ulogovanKorisnik = (Korisnik) session.getAttribute("korisnik");
+        Long userId = null;
+
+        if(ulogovanKorisnik == null)
+            return new ResponseEntity<>("Niste ulogovani", HttpStatus.UNAUTHORIZED);
+        else userId = ulogovanKorisnik.getId();
+
+        Polica polica = korisnikService.obrisiPolicu(userId, policaDto.getNaziv());
+
+        if(polica == null)
+            return new ResponseEntity<>("Ne postoji polica sa tim nazivom", HttpStatus.BAD_REQUEST);
+
+        boolean proveraBaze = policaService.obrisiIzBaze(polica.getNaziv());
+
+        if(proveraBaze)
+            return new ResponseEntity<>("Uklonjena je polica iz baze", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Polica nije uklonjena iz baze", HttpStatus.CONFLICT);
     }
 
     @GetMapping("/api/policeAutor")

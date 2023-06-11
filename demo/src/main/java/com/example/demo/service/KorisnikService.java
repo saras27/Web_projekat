@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Polica;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,10 @@ public class KorisnikService {
     private KorisnikRepository korisnikRepository;
     @Autowired
     private PolicaService policaService;
+    @Autowired
+    private PolicaRepository policaRepository;
+    @Autowired
+    private KnjigaService knjigaService;
 
     public Korisnik findOne(Long id){
         Optional<Korisnik> foundKorisnik = korisnikRepository.findById(id);
@@ -46,6 +51,18 @@ public class KorisnikService {
         if(korisnik == null)
             return null;
         return  korisnik;
+    }
+    public Polica obrisiPolicu(Long id, String naziv){
+        if(naziv == "Read" || naziv == "Want to Read" || naziv == "Currently Reading")
+            return null;    //ne moze da obrise primarne police
+        Polica polica = policaService.findOne(naziv);
+
+        if(polica == null)
+            return null;
+        else{
+            policaRepository.delete(polica);
+            return polica;
+        }
     }
     public Korisnik registruj(String ime, String prezime, String korisnickoIme, String mejl, String lozinka){
         Korisnik korisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
