@@ -2,10 +2,7 @@ package com.example.demo.service;
 
 
 import com.example.demo.controller.RecenzijaRestController;
-import com.example.demo.entity.Knjiga;
-import com.example.demo.entity.Korisnik;
-import com.example.demo.entity.Polica;
-import com.example.demo.entity.StavkaPolice;
+import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +22,8 @@ public class PolicaService {
     @Autowired
     private KorisnikRepository korisnikRepository;
     @Autowired
+    private AutorRepository autorRepository;
+    @Autowired
     private KnjigaRepository knjigaRepository;
     @Autowired
     private StavkaPoliceRepository stavkaPoliceRepository;
@@ -34,12 +33,16 @@ public class PolicaService {
         return foundPolica.orElse(null);
 
     }
-    public boolean obrisiIzBaze(String naziv){
-        Polica polica = policaRepository.getPolicaByNaziv(naziv);
+    public ResponseEntity<String> obrisiIzBaze(Polica polica, Long userId){
+        if(polica.isPrimarna())
+            return new ResponseEntity<>("Nije mmoguce brisanje primarne police", HttpStatus.FORBIDDEN);
+        else{
+            policaRepository.delete(polica);
+            Autor autor = autorRepository.getAutorById(userId);
+            autorRepository.save(autor);
+            return new ResponseEntity<>("Polica obrisana", HttpStatus.OK);
 
-        if(polica == null)
-            return true;
-        else return false;
+        }
     }
 
     public List<Polica> findAll(){return policaRepository.findAll();}

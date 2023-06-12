@@ -3,11 +3,13 @@ package com.example.demo.service;
 import com.example.demo.dto.AktivacijaAutoraDto;
 import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Polica;
+import com.example.demo.entity.Autor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.entity.Korisnik;
 import com.example.demo.repository.KorisnikRepository;
 import com.example.demo.repository.PolicaRepository;
+import com.example.demo.repository.AutorRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +19,8 @@ public class KorisnikService {
 
     @Autowired
     private KorisnikRepository korisnikRepository;
+    @Autowired
+    private AutorRepository autorRepository;
     @Autowired
     private PolicaService policaService;
     @Autowired
@@ -88,4 +92,8 @@ public class KorisnikService {
     public Korisnik getByKorisnickoIme(String ime) {
         return korisnikRepository.getByKorisnickoIme(ime);
     }
+    public Autor getAutorById(Long id) {
+        return autorRepository.getAutorById(id);
+    }
+
 }

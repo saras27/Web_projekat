@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.*;
 import com.example.demo.entity.*;
 import com.example.demo.repository.KnjigaRepository;
+import com.example.demo.repository.PolicaRepository;
 import com.example.demo.service.KnjigaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PolicaService;
@@ -21,6 +22,8 @@ import java.util.List;
 public class AutorRestController {
     @Autowired
     private PolicaService policaService;
+    @Autowired
+    private PolicaRepository policaRepository;
     @Autowired
     private KnjigaService knjigaService;
     @Autowired
@@ -72,26 +75,33 @@ public class AutorRestController {
             return  new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
         }
     }
-    @DeleteMapping("/api/izbrisiPolicuAutor")
-    public ResponseEntity<String> izbrisiPolicuAutor(@RequestBody PolicaDto policaDto, HttpSession session){
-        Korisnik ulogovanKorisnik = (Korisnik) session.getAttribute("korisnik");
-        Long userId = null;
-
-        if(ulogovanKorisnik == null)
+    @PostMapping("/api/izbrisiPolicuAutor")
+    public ResponseEntity<String> izbrisiPolicuAutor(@RequestBody NovaPolicaDto policaDto, HttpSession session){
+        if(checkLoginAutor(session)) {
             return new ResponseEntity<>("Niste ulogovani", HttpStatus.UNAUTHORIZED);
-        else userId = ulogovanKorisnik.getId();
+        }
+        Autor ulogovanKorisnik = (Autor) session.getAttribute("autor");
+        if (ulogovanKorisnik.getUloga().equals(Uloga.AUTOR)) {
+            return new ResponseEntity<>("Niste autor", HttpStatus.UNAUTHORIZED);
 
-        Polica polica = korisnikService.obrisiPolicu(userId, policaDto.getNaziv());
-
+        }
+        Polica polica = policaService.getByNaziv(policaDto.getNaziv());
         if(polica == null)
-            return new ResponseEntity<>("Ne postoji polica sa tim nazivom", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Polica sa datim imenom ne postoji", HttpStatus.NOT_FOUND);
 
-        boolean proveraBaze = policaService.obrisiIzBaze(polica.getNaziv());
+        if(polica.isPrimarna()){
+            return new ResponseEntity<>("Brisanje primarne police nije dozvoljeno", HttpStatus.FORBIDDEN);
+        }
 
-        if(proveraBaze)
-            return new ResponseEntity<>("Uklonjena je polica iz baze", HttpStatus.OK);
-        else
-            return new ResponseEntity<>("Polica nije uklonjena iz baze", HttpStatus.CONFLICT);
+        Autor korisnikIzBaze = korisnikService.getAutorById(ulogovanKorisnik.getId());
+        korisnikIzBaze.getPolice().remove(polica);
+        Korisnik korisnik = korisnikService.save(korisnikIzBaze);
+        policaService.delete(polica);
+
+        return new ResponseEntity<>("Polica uspesno obrisana", HttpStatus.OK);
+
+
+
     }
   /*  @PostMapping("/api/dodaj-knjigu")
     public ResponseEntity<String> dodajKnjigu(@RequestBody KnjigaDto knjigaDto,@PathVariable Long policaId, HttpServletRequest request){
