@@ -1,4 +1,6 @@
 INSERT INTO KORISNIK(ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, slika, opis, uloga) VALUES('Petar', 'Petrovic', 'PecaMeca', 'peca@gmail.com', '2djH&65', '2003-05-26', 'slika1234', 'nesto', 1);
+INSERT INTO KORISNIK(ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, slika, opis, uloga) VALUES('Jovana', 'Jovanovic', 'Jocii', 'jocke@gmail.com', 'fs548f6', '2001-04-22', 'slika215', 'nesto', 2);
+INSERT INTO KORISNIK(ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, slika, opis, uloga) VALUES('Marija', 'Marjanovic', 'Mara', 'mara@gmail.com', 'Jlpd7f', '1998-01-26', 'slika34', 'nesto', 0);
 
 INSERT INTO ZANR (naziv) VALUES ('drama');
 

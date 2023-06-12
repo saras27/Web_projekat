@@ -54,7 +54,7 @@ public class KorisnikRestController {
     }
 
     @GetMapping("/check-login")
-    @ResponseBody
+    //@ResponseBody
     public boolean checkLogin(HttpSession session) {
         if (session.getAttribute("korisnik") != null) {
             // User is logged in
@@ -79,7 +79,7 @@ public class KorisnikRestController {
             return new ResponseEntity("Neispravni podaci za registraciju", HttpStatus.BAD_REQUEST);
 
 
-        Scanner in1 = new Scanner(System.in);
+        /*Scanner in1 = new Scanner(System.in);
         String ime = in1.nextLine();
 
         Scanner in2 = new Scanner(System.in);
@@ -95,11 +95,9 @@ public class KorisnikRestController {
         String lozinka = in5.nextLine();
     //lozinka treba da se unese 2 puta radi potvrde
         Scanner in6 = new Scanner(System.in);
-        String potvrda = in6.nextLine();
+        String potvrda = in6.nextLine();*/
 
-        if(registracijaDto.getIme().equals(ime) && registracijaDto.getPrezime().equals(prezime) &&
-                registracijaDto.getKorisnickoIme().equals(korisnickoIme) && registracijaDto.getLozinka().equals(lozinka) &&
-        registracijaDto.getMejl().equals(mejl) && registracijaDto.getPotvrda_lozinke().equals(potvrda) && lozinka.equals(potvrda))
+        if(registracijaDto.getLozinka().equals(registracijaDto.getPotvrda_lozinke()))
         {
             Korisnik registrovanKorisnik = korisnikService.registruj(registracijaDto.getIme(),
                     registracijaDto.getPrezime(), registracijaDto.getKorisnickoIme(), registracijaDto.getMejl(),
