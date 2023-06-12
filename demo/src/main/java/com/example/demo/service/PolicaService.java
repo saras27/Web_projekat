@@ -52,7 +52,7 @@ public class PolicaService {
         if(findOne(imePolice) != null){
             return new ResponseEntity<>("Dodavanje police nije moguce, postoji polica sa tim imenom", HttpStatus.BAD_REQUEST);
         }else {
-            if(polica.getNaziv().equals("Read") || polica.getNaziv().equals("Want to Read") || polica.getNaziv().equals("Currently Reading")) {
+            if(imePolice.equals("Read") || imePolice.equals("Want to Read") || imePolice.equals("Currently Reading")) {
                 Polica polica1 = new Polica(imePolice, true);
                 korisnik.getPolice().add(polica1);
                 korisnikRepository.save(korisnik);
