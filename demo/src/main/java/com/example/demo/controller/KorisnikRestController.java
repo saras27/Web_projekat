@@ -68,7 +68,7 @@ public class KorisnikRestController {
     public Korisnik getKorisnik(@PathVariable(name = "KorisnickoIme") String naslov, HttpSession session){
         Korisnik korisnik = (Korisnik) session.getAttribute("KorisnickoIme");
         System.out.println(korisnik);
-        session.invalidate();
+        //session.invalidate();
         return korisnikService.nadjiKorisnik(korisnik.getKorisnickoIme());
     }
     @PostMapping("api/registracija")
@@ -146,12 +146,12 @@ public class KorisnikRestController {
         return new ResponseEntity<>("Niste ulogovani", HttpStatus.OK);
     }
 
-    @PostMapping("/api/azurirajProfil/{id}")
-    public ResponseEntity<String> azuriranjeProfila(@PathVariable Long id, @RequestBody AzuriranjeProfilaDto azuriranjeProfilaDto, HttpSession session){
+    @PostMapping("/api/azurirajProfil/{korisnickoIme")
+    public ResponseEntity<String> azuriranjeProfila(@PathVariable String korisnickoIme, @RequestBody AzuriranjeProfilaDto azuriranjeProfilaDto, HttpSession session){
         if(!checkLogin(session)){
             return new ResponseEntity<>("Niste ulogovani.", HttpStatus.FORBIDDEN);
         }
-        Korisnik korisnik = korisnikService.getById(id);
+        Korisnik korisnik = korisnikService.getByKorisnickoIme(korisnickoIme);
 
         if(korisnik == null){
             return new ResponseEntity<>("Korisnik nije pronadjen.", HttpStatus.NOT_FOUND);

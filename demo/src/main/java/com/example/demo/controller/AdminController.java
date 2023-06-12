@@ -53,7 +53,7 @@ public class AdminController {
 
     @PostMapping("/api/posalji-zahtev")
     public ResponseEntity<String> posaljiZahtev(@RequestBody AktivacijaAutoraDto aktivacijaAutoraDto, HttpSession session){
-        if(!checkLogin(session)){
+        if(checkLogin(session)){
             return new ResponseEntity<>("Ne mozete podneti zahtev ukoliko ste ulogovani", HttpStatus.FORBIDDEN);
         }else{
             ZahtevZaAktivaciju zahtevZaAktivaciju = new ZahtevZaAktivaciju();
@@ -63,8 +63,9 @@ public class AdminController {
             zahtevZaAktivaciju.setDatum(LocalDate.now());
             zahtevZaAktivaciju.setStatus(Status.CEKANJE);
             adminService.save(zahtevZaAktivaciju);
+            return new ResponseEntity<>("Zahtev je podnesen", HttpStatus.OK);
         }
-        return new ResponseEntity<>("GRESKA", HttpStatus.BAD_REQUEST);
+
     }
 
     @PostMapping("/api/{id}")
