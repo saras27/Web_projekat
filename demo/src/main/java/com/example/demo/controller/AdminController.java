@@ -30,7 +30,7 @@ public class AdminController {
     @Autowired
     private ZanrService zanrService;
     @GetMapping("/api/zahtevi")
-    ResponseEntity<List<AktivacijaAutoraDto>> listaZahteva(HttpSession session){
+    ResponseEntity<?> listaZahteva(HttpSession session){
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
         if(korisnik == null){
             System.out.println("Nema sesije");
@@ -41,9 +41,10 @@ public class AdminController {
             List<ZahtevZaAktivaciju> sviZahtevi = adminService.findAll();
             List<AktivacijaAutoraDto> naCekanju = null;
             for (ZahtevZaAktivaciju z : sviZahtevi) {
-                //    if(z.getStatus() == Status.CEKANJE){
-                AktivacijaAutoraDto zahtev = new AktivacijaAutoraDto();
-                naCekanju.add(zahtev);
+                if(z.getStatus() == Status.CEKANJE) {
+                    AktivacijaAutoraDto zahtev = new AktivacijaAutoraDto();
+                    naCekanju.add(zahtev);
+                }
             }
             return ResponseEntity.ok(naCekanju);
             }
