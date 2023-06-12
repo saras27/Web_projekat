@@ -117,8 +117,8 @@ public class KorisnikRestController {
         }
     }
 
-    @PostMapping("/api/obrisiPolicu")
-    public ResponseEntity<String> novaPolica(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request) {
+    @PostMapping("/api/obrisiPolicu-prijavljenikorisnik")
+    public ResponseEntity<String> obrisiPolicu(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         Polica polica = policaService.getByNaziv(novaPolicaDto.getNaziv());
@@ -131,11 +131,21 @@ public class KorisnikRestController {
 
         Korisnik korisnikIzBaze = korisnikService.getByKorisnickoIme(prijavljeniKorisnik.getKorisnickoIme());
         korisnikIzBaze.getPolice().remove(polica);
-        korisnikService.save(korisnikIzBaze);
+        Korisnik korisnik = korisnikService.save(korisnikIzBaze);
         policaService.delete(polica);
 
         return new ResponseEntity<>("Polica uspesno obrisana", HttpStatus.OK);
 
+    }
+
+    @PostMapping("/api/dodajPolicu-prijavljenikorisnik")
+    public ResponseEntity<String> dodajPolicu(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (checkLogin(session)) {
+            Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+            return policaService.save(novaPolicaDto.getNaziv(), prijavljeniKorisnik);
+        }
+        return new ResponseEntity<>("Niste ulogovani", HttpStatus.OK);
     }
 
     @PostMapping("/api/azurirajProfil/{id}")

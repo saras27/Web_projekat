@@ -23,6 +23,7 @@ public class Polica implements Serializable {
             joinColumns = @JoinColumn(name = "polica_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "stavka_id", referencedColumnName = "id"))
     private Set<StavkaPolice> stavke = new HashSet<>();
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Korisnik korisnik;
 
