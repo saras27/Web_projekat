@@ -16,7 +16,6 @@ public class RecenzijaService {
     private RecenzijaRepository recenzijaRepository;
 
 
-
     public List<Recenzija> findAll(){
         return recenzijaRepository.findAll();
     }

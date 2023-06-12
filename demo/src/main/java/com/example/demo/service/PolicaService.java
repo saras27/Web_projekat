@@ -1,14 +1,12 @@
 package com.example.demo.service;
 
 
+import com.example.demo.controller.RecenzijaRestController;
 import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Korisnik;
 import com.example.demo.entity.Polica;
 import com.example.demo.entity.StavkaPolice;
-import com.example.demo.repository.KnjigaRepository;
-import com.example.demo.repository.PolicaRepository;
-import com.example.demo.repository.KorisnikRepository;
-import com.example.demo.repository.StavkaPoliceRepository;
+import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 @Service
 public class PolicaService {
 
@@ -63,16 +63,25 @@ public class PolicaService {
 
         }
     }
-   /* public ResponseEntity<String> dodavanjeNaPolicu(String imeKnjige, Polica polica){
+
+    public boolean containsStavka(Long id, Polica polica){
+        for(StavkaPolice stavkaPolice1 : polica.getStavke()){
+            if(stavkaPolice1.getId().equals(id)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public ResponseEntity<String> dodavanjeNaPolicu(String imeKnjige, Polica polica){
         Polica read = policaRepository.getPolicaByNaziv("Read");
         Polica reading = policaRepository.getPolicaByNaziv("Currently Reading");
         Polica wantToRead = policaRepository.getPolicaByNaziv("Want to Read");
         Knjiga novaKnjiga = knjigaRepository.getByNaslov(imeKnjige);
-        if(stavkaPoliceRepository.existsByKnjigaContaining(novaKnjiga,  policaRepository.getPolicaByNaziv("Read")) || stavkaPoliceRepository.existsByKnjigaContaining(novaKnjiga, policaRepository.getPolicaByNaziv("Currently Reading")) || stavkaPoliceRepository.existsByKnjigaContaining(novaKnjiga,policaRepository.getPolicaByNaziv("Want to Read"))){
+        StavkaPolice stavkaPolice = stavkaPoliceRepository.getStavkaPoliceByKnjiga(novaKnjiga);
+        if(containsStavka(novaKnjiga.getId(), read) || containsStavka(novaKnjiga.getId(), reading) ||containsStavka(novaKnjiga.getId(), wantToRead)){
             if(polica.isPrimarna()){
                 return new ResponseEntity("Ne mozete dodati knjigu na vise od jedne primarne police", HttpStatus.BAD_REQUEST);
             }else{
-                StavkaPolice stavkaPolice = new StavkaPolice();
                 stavkaPolice.setKnjiga(novaKnjiga);
                 polica.setStavka(stavkaPolice);
                 policaRepository.save(polica);
@@ -80,11 +89,11 @@ public class PolicaService {
             }
         } if(polica.isPrimarna()){
             if(polica.equals(read)){
-                //recenzija
+                //recenzija dijalog
+
                 return ResponseEntity.ok("Knjiga dodata na policu");
 
             }else{
-                StavkaPolice stavkaPolice = new StavkaPolice();
                 stavkaPolice.setKnjiga(novaKnjiga);
                 polica.setStavka(stavkaPolice);
                 policaRepository.save(polica);
@@ -92,7 +101,7 @@ public class PolicaService {
             }
         }
         return new ResponseEntity<>("Knjigu prvo morate dodati na neku od primarnih polica", HttpStatus.BAD_REQUEST);
-    }*/
+    }
 
     public Polica getByNaziv(String ime) {
         return policaRepository.getPolicaByNaziv(ime);

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.AzuriranjeProfilaDto;
 import com.example.demo.entity.*;
 import com.example.demo.repository.AutorRepository;
 import com.example.demo.repository.KorisnikRepository;
@@ -41,6 +42,16 @@ public class AdminService {
         noviAutor.setUloga(Uloga.AUTOR);
         autorRepository.save(noviAutor);
         return new ResponseEntity<>("Profil autora je aktiviran", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> azuriraj(Autor autor, AzuriranjeProfilaDto azuriranjeProfilaDto){
+        autor.setIme(azuriranjeProfilaDto.getIme());
+        autor.setPrezime(azuriranjeProfilaDto.getPrezime());
+        autor.setDatumRodjenja(azuriranjeProfilaDto.getDatumRodjenja());
+        autor.setSlika(azuriranjeProfilaDto.getSlika());
+        autor.setOpis(azuriranjeProfilaDto.getOpis());
+        autorRepository.save(autor);
+        return new ResponseEntity<>("Uspesno azuriran profil", HttpStatus.OK);
     }
 
 }

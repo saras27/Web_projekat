@@ -79,10 +79,10 @@ public class PolicaRestController {
         }
     }
 
-   /* @PostMapping("/api/dodaj-knjigu")
-    public ResponseEntity<String> dodajKnjigu(@RequestBody KnjigaDto knjigaDto,@PathVariable Long policaId, HttpServletRequest request){
+    @PostMapping("/api/dodaj-knjigu")
+    public ResponseEntity<String> dodajKnjigu(@RequestBody KnjigaDto knjigaDto,@PathVariable Long id, HttpServletRequest request){
         if(checkLogin(request)) {
-            Polica polica = policaService.getById(policaId);
+            Polica polica = policaService.getById(id);
             if (polica != null) {
                 if (policaService.findOne(knjigaDto.getNaslov()) != null) {
                     return policaService.dodavanjeNaPolicu(knjigaDto.getNaslov(), polica);
@@ -96,7 +96,7 @@ public class PolicaRestController {
             return  new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
         }
     }
-    */
+
 
 
 

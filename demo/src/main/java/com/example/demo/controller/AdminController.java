@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.*;
 import com.example.demo.entity.*;
+import com.example.demo.repository.AutorRepository;
 import com.example.demo.service.KnjigaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.AdminService;
@@ -20,6 +21,8 @@ import java.util.List;
 public class AdminController {
     @Autowired
     private KorisnikService korisnikService;
+    @Autowired
+    private AutorRepository autorRepository;
     @Autowired
     private KnjigaService knjigaService;
     @Autowired
@@ -119,6 +122,36 @@ public class AdminController {
             Uloga uloga = (Uloga) session.getAttribute("uloga");
             if (uloga == Uloga.ADMINISTRATOR) {
                 knjigaService.azuriranjeKnjige(id, azuriranjeKnjigeDto);
+            }
+            return new ResponseEntity<>("Samo administratori imaju pristup", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
+
+    }
+
+    @PostMapping("/api/brisanjeKnjige-admin/{id}")
+    public ResponseEntity<String> brisanjeKnjiga(@PathVariable Long id, HttpSession session) {
+        if (checkLogin(session)) {
+            Uloga uloga = (Uloga) session.getAttribute("uloga");
+            if (uloga == Uloga.ADMINISTRATOR) {
+                knjigaService.brisanjeKnjigeAdmin(id);
+            }
+            return new ResponseEntity<>("Samo administratori imaju pristup", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
+
+    }
+
+    @PostMapping("/api/azurirajProfil-admin/{id}")
+    public ResponseEntity<String> azuriranjeProfila(@RequestBody AzuriranjeProfilaDto azuriranjeProfilaDto, @PathVariable Long id, HttpSession session){
+        if (checkLogin(session)) {
+            Uloga uloga = (Uloga) session.getAttribute("uloga");
+            if (uloga == Uloga.ADMINISTRATOR) {
+                Autor autor = autorRepository.getAutorById(id);
+                if(autor.isAktivan() == false){
+
+                }
+                return new ResponseEntity<>("Ne mozete azurirati profil koji je aktivan", HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<>("Samo administratori imaju pristup", HttpStatus.BAD_REQUEST);
         }

@@ -2,7 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Korisnik;
+import com.example.demo.entity.StavkaPolice;
 import com.example.demo.repository.KnjigaRepository;
+import com.example.demo.repository.RecenzijaRepository;
 import com.example.demo.repository.StavkaPoliceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,8 @@ public class KnjigaService {
     @Autowired
     private KnjigaRepository knjigaRepository;
     @Autowired
+    private RecenzijaRepository recenzijaRepository;
+    @Autowired
     private StavkaPoliceRepository stavkaPoliceRepository;
 
     public Knjiga findKnjigu(String naslov){
@@ -27,6 +31,7 @@ public class KnjigaService {
 
         return null;
     }
+    public void remove(Knjiga knjiga){knjigaRepository.delete(knjiga);}
 
     public List<Knjiga> findAll(){
         return knjigaRepository.findAll();
@@ -47,10 +52,15 @@ public class KnjigaService {
         return new ResponseEntity<>("Knjiga je azurirana", HttpStatus.OK);
     }
 
-    /*public Knjiga login(String username, String password) {
-        Knjiga employee = knjigaRepository.getByNaslov(username);
-        if(employee == null || !employee.getPassword().equals(password))
-            return null;
-        return  employee;
-    }*/
+    public ResponseEntity<String> brisanjeKnjigeAdmin(Long id){
+        Knjiga knjiga = knjigaRepository.getById(id);
+        StavkaPolice stavka = stavkaPoliceRepository.existsByKnjiga_Id(id);
+        if(recenzijaRepository.getRecenzijaByStavka(stavka) == null){
+            return new ResponseEntity<>("Nemoguce je obrisati knjigu koja ima recenzije", HttpStatus.BAD_REQUEST);
+        }
+        remove(knjiga);
+        return new ResponseEntity<>("Knjiga je obrisana", HttpStatus.OK);
+
+    }
+    
 }
