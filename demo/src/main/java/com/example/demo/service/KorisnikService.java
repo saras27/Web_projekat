@@ -71,7 +71,6 @@ public class KorisnikService {
             policaService.save("Read", korisnik.getId());
             policaService.save("Currently Reading", korisnik.getId());
             policaService.save("Want to Read", korisnik.getId());
-
             return korisnikRepository.save(korisnik);
         }
         else

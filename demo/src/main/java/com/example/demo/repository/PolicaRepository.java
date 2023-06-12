@@ -13,6 +13,7 @@ public interface PolicaRepository extends JpaRepository<Polica, Long>{
      Polica getPolicaByNaziv(String naziv);
      Polica getPolicaById(Long id);
      void deletePolicaById(Long id);
+     Polica findPolicaByNazivAndKorisnik_Id(String policaName, Long idKorisnika);
      void delete(Polica polica);
 
 

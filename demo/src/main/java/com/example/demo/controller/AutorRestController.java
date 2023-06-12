@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.*;
-import com.example.demo.entity.Knjiga;
-import com.example.demo.entity.Korisnik;
-import com.example.demo.entity.Polica;
-import com.example.demo.entity.Uloga;
+import com.example.demo.entity.*;
 import com.example.demo.repository.KnjigaRepository;
 import com.example.demo.service.KnjigaService;
 import com.example.demo.service.KorisnikService;
@@ -34,14 +31,17 @@ public class AutorRestController {
     @PostMapping("/api/dodajPolicuAutor")
     public ResponseEntity<String> novaPolicaAutor(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request/*HttpSession session*/){
         HttpSession session = request.getSession();
-        if(session != null && session.getAttribute("korisnik") != null) {
+        if(checkLoginAutor(request)) {
             if (policaService.findOne(novaPolicaDto.getNaziv()) != null && novaPolicaDto.getNaziv() != " ") {
                 System.out.println("Polica sa ovim imenom vec postoji ili ste uneli prazan string.");
             } else {
-                // String korisnickoIme = (String) session.getAttribute("")
+                Autor korisnik = (Autor) session.getAttribute("autor");
+                return policaService.save(novaPolicaDto.getNaziv(), korisnik);
+                //return ResponseEntity.ok("Polica uspesno dodata");
+             /*   // String korisnickoIme = (String) session.getAttribute("")
                 Long id = (Long) session.getAttribute("id");
-                Polica addedPolica = policaService.save(novaPolicaDto.getNaziv(), id);
-                return ResponseEntity.ok("Polica uspesno dodata");
+                Polica addedPolica = policaService.save(novaPolicaDto.getNaziv(), );
+                return ResponseEntity.ok("Polica uspesno dodata");*/
             }
             return new ResponseEntity("Neispravni podaci", HttpStatus.BAD_REQUEST);
         } else{

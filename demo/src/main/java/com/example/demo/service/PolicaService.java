@@ -44,22 +44,17 @@ public class PolicaService {
 
     public List<Polica> findAll(){return policaRepository.findAll();}
 
-    public Polica save(String imePolice, Long id){
+    public ResponseEntity<String> save(String imePolice, Korisnik korisnik){
         Polica polica = policaRepository.getPolicaByNaziv(imePolice);
-        Korisnik korisnik = korisnikRepository.getKorisnikById(id);
         if(findOne(imePolice) != null){
-            return null;
+            return new ResponseEntity<>("Dodavanje police nije moguce, postoji polica sa tim imenom", HttpStatus.BAD_REQUEST);
         }else {
-            if(imePolice.equals("Read") || imePolice.equals("Currently Reading") || imePolice.equals("Want to Read")){
-                Polica polica1 = new Polica(imePolice, true);
-                korisnik.getPolice().add(polica1);
-                korisnikRepository.save(korisnik);
-                return policaRepository.save(polica1);
-            }
             Polica polica1 = new Polica(imePolice, false);
             korisnik.getPolice().add(polica1);
             korisnikRepository.save(korisnik);
-            return policaRepository.save(polica1);
+            policaRepository.save(polica1);
+            return new ResponseEntity("Polica je uspesno dodata", HttpStatus.OK);
+
 
         }
     }
@@ -72,10 +67,10 @@ public class PolicaService {
         }
         return false;
     }
-    public ResponseEntity<String> dodavanjeNaPolicu(String imeKnjige, Polica polica){
-        Polica read = policaRepository.getPolicaByNaziv("Read");
-        Polica reading = policaRepository.getPolicaByNaziv("Currently Reading");
-        Polica wantToRead = policaRepository.getPolicaByNaziv("Want to Read");
+    public ResponseEntity<String> dodavanjeNaPolicu(String imeKnjige, Polica polica, Long id){
+        Polica read = policaRepository.findPolicaByNazivAndKorisnik_Id("Read", id);
+        Polica reading = policaRepository.findPolicaByNazivAndKorisnik_Id("Currently Reading", id);
+        Polica wantToRead = policaRepository.findPolicaByNazivAndKorisnik_Id("Want to Read", id);
         Knjiga novaKnjiga = knjigaRepository.getByNaslov(imeKnjige);
         StavkaPolice stavkaPolice = stavkaPoliceRepository.getStavkaPoliceByKnjiga(novaKnjiga);
         if(containsStavka(novaKnjiga.getId(), read) || containsStavka(novaKnjiga.getId(), reading) ||containsStavka(novaKnjiga.getId(), wantToRead)){
