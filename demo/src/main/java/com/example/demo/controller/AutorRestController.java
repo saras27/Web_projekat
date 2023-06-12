@@ -82,23 +82,22 @@ public class AutorRestController {
         }
         Autor ulogovanKorisnik = (Autor) session.getAttribute("autor");
         if (ulogovanKorisnik.getUloga().equals(Uloga.AUTOR)) {
-            return new ResponseEntity<>("Niste autor", HttpStatus.UNAUTHORIZED);
+            Polica polica = policaService.getByNaziv(policaDto.getNaziv());
+            if(polica == null)
+                return new ResponseEntity<>("Polica sa datim imenom ne postoji", HttpStatus.NOT_FOUND);
 
+            if(polica.isPrimarna()){
+                return new ResponseEntity<>("Brisanje primarne police nije dozvoljeno", HttpStatus.FORBIDDEN);
+            }
+
+            Autor korisnikIzBaze = korisnikService.getAutorById(ulogovanKorisnik.getId());
+            korisnikIzBaze.getPolice().remove(polica);
+            Korisnik korisnik = korisnikService.save(korisnikIzBaze);
+            policaService.delete(polica);
+
+            return new ResponseEntity<>("Polica uspesno obrisana", HttpStatus.OK);
         }
-        Polica polica = policaService.getByNaziv(policaDto.getNaziv());
-        if(polica == null)
-            return new ResponseEntity<>("Polica sa datim imenom ne postoji", HttpStatus.NOT_FOUND);
-
-        if(polica.isPrimarna()){
-            return new ResponseEntity<>("Brisanje primarne police nije dozvoljeno", HttpStatus.FORBIDDEN);
-        }
-
-        Autor korisnikIzBaze = korisnikService.getAutorById(ulogovanKorisnik.getId());
-        korisnikIzBaze.getPolice().remove(polica);
-        Korisnik korisnik = korisnikService.save(korisnikIzBaze);
-        policaService.delete(polica);
-
-        return new ResponseEntity<>("Polica uspesno obrisana", HttpStatus.OK);
+        return new ResponseEntity<>("Niste autor", HttpStatus.UNAUTHORIZED);
 
 
 
