@@ -68,10 +68,19 @@ public class KorisnikService {
     public Korisnik registruj(String ime, String prezime, String korisnickoIme, String mejl, String lozinka){
         Korisnik korisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
         if(korisnik == null){  //ako ne postoji korisnik sa tim korisnickim imenom, uspesno se registruje
-            policaService.save("Read", korisnik);
-            policaService.save("Currently Reading", korisnik);
-            policaService.save("Want to Read", korisnik);
-            return korisnikRepository.save(korisnik);
+
+            Korisnik korisnik1 = new Korisnik();
+            korisnik1.setIme(ime);
+            korisnik1.setPrezime(prezime);
+            korisnik1.setKorisnickoIme(korisnickoIme);
+            korisnik1.setMejlAdresa(mejl);
+            korisnik1.setLozinka(lozinka);
+
+
+            policaService.save("Read", korisnik1);
+            policaService.save("Currently Reading", korisnik1);
+            policaService.save("Want to Read", korisnik1);
+            return korisnikRepository.save(korisnik1);
         }
         else
             return null;
