@@ -65,6 +65,9 @@ public class Polica implements Serializable {
     public void setStavke(Set<StavkaPolice> stavke) {
         this.stavke = stavke;
     }
+    public void setStavka(StavkaPolice stavka) {
+        this.stavke.add(stavka);
+    }
 
     public Korisnik getKorisnik() {
         return korisnik;

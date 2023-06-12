@@ -6,12 +6,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-enum Uloga {
-    CITALAC,
-    AUTOR,
-    ADMINISTRATOR
-}
-
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Korisnik implements Serializable {

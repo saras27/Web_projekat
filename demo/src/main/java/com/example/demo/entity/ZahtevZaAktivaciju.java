@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class ZahtevZaAktivaciju implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     @Column
     private String email;
     @Column
@@ -22,12 +22,12 @@ public class ZahtevZaAktivaciju implements Serializable {
     @Column
     private LocalDate datum;
     @Column
-    private String status;
+    private Status status;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Autor autor;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public String getEmail() {
@@ -46,12 +46,12 @@ public class ZahtevZaAktivaciju implements Serializable {
         return datum;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
     public void setId(Long id) {
-        Id = id;
+        id = id;
     }
 
     public void setEmail(String email) {
@@ -70,14 +70,14 @@ public class ZahtevZaAktivaciju implements Serializable {
         this.datum = datum;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
     @Override
     public String toString() {
         return "Zahtev{" +
-                "Id=" + Id +
+                "Id=" + id +
                 ", email='" + email + '\'' +
                 ", telefon='" + telefon + '\'' +
                 ", poruka='" + poruka + '\'' +

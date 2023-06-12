@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.KnjigaDto;
 import com.example.demo.dto.NovaPolicaDto;
 import com.example.demo.dto.PolicaDto;
 import com.example.demo.entity.Polica;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.security.spec.ECPoint;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -77,7 +79,25 @@ public class PolicaRestController {
         }
     }
 
-    
+   /* @PostMapping("/api/dodaj-knjigu")
+    public ResponseEntity<String> dodajKnjigu(@RequestBody KnjigaDto knjigaDto,@PathVariable Long policaId, HttpServletRequest request){
+        if(checkLogin(request)) {
+            Polica polica = policaService.getById(policaId);
+            if (polica != null) {
+                if (policaService.findOne(knjigaDto.getNaslov()) != null) {
+                    return policaService.dodavanjeNaPolicu(knjigaDto.getNaslov(), polica);
+                } else {
+                    return new ResponseEntity<>("Knjiga sa ovim naslovom ne postoji u bazi", HttpStatus.NOT_FOUND);
+                }
+            }else{
+                return new ResponseEntity<>("Polica na koju zelite da dodate knjigu ne postoji", HttpStatus.NOT_FOUND);
+            }
+        }else{
+            return  new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
+        }
+    }
+    */
+
 
 
 }

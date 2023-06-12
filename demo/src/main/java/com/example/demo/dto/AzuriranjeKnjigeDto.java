@@ -3,7 +3,6 @@ package com.example.demo.dto;
 import com.example.demo.entity.Knjiga;
 
 public class AzuriranjeKnjigeDto {
-    private Long id;
     private String naslov;
     private String naslovnaFotografija;
     private String opis;
@@ -16,14 +15,6 @@ public class AzuriranjeKnjigeDto {
         this.naslov = naslov;
         this.naslovnaFotografija = naslovnaFotografija;
         this.opis = opis;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        id = id;
     }
 
     public String getNaslov() {

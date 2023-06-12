@@ -12,6 +12,6 @@ INSERT INTO RECENZIJA(ocena, tekst, datum_recenzije, stavka_id, korisnik_id) VAL
 
 INSERT INTO POLICA(naziv, primarna) VALUES('prva', 1);
 
-INSERT INTO ZAHTEV_ZA_AKTIVACIJU(email, telefon, poruka, datum, status) VALUES('joca@gmail.com', '062456678', 'Zahtev za autora', '2021-06-06', 'na cekanju');
+INSERT INTO ZAHTEV_ZA_AKTIVACIJU(email, telefon, poruka, datum, status) VALUES('joca@gmail.com', '062456678', 'Zahtev za autora', '2021-06-06', 1 );
 
 INSERT INTO POLICE_STAVKE(stavka_id, polica_id) VALUES(1, 1);

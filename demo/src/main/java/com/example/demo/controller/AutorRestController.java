@@ -4,6 +4,7 @@ import com.example.demo.dto.*;
 import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Korisnik;
 import com.example.demo.entity.Polica;
+import com.example.demo.entity.Uloga;
 import com.example.demo.repository.KnjigaRepository;
 import com.example.demo.service.KnjigaService;
 import com.example.demo.service.KorisnikService;
@@ -49,15 +50,21 @@ public class AutorRestController {
     }
 
     @PostMapping("/api/dodajKnjigu")
-    public ResponseEntity<String> novaKnjiga(@RequestBody KnjigaDto novaKnjigaDto, HttpServletRequest request/*HttpSession session*/){
-        HttpSession session = request.getSession();
-        if(session != null && session.getAttribute("korisnik") != null) {
+    public ResponseEntity<String> novaKnjiga(@RequestBody NovaKnjigaDto novaKnjigaDto, HttpSession session){
+        if(checkLoginAutor(session)) {
             if (knjigaService.findKnjigu(novaKnjigaDto.getNaslov()) != null && novaKnjigaDto.getNaslov() != " ") {
                 System.out.println("Knjiga sa ovim imenom vec postoji ili ste uneli prazan string.");
             } else {
-                // String korisnickoIme = (String) session.getAttribute("")
-                Long id = (Long) session.getAttribute("id");
-                Knjiga addedKnjiga = knjigaService.save(knjigaService.findKnjigu(novaKnjigaDto.getNaslov()));
+                Knjiga knjiga = new Knjiga();
+                knjiga.setNaslov(novaKnjigaDto.getNaslov());
+                knjiga.setNaslovnaFotografija(novaKnjigaDto.getNaslovnaFotografija());
+                knjiga.setISBN(novaKnjigaDto.getISBN());
+                knjiga.setDatumObjavljivanja(novaKnjigaDto.getDatumObjavljivanja());
+                knjiga.setBrojStrana(novaKnjigaDto.getBrojStrana());
+                knjiga.setOpis(novaKnjigaDto.getOpis());
+                knjiga.setZanr(novaKnjigaDto.getZanr());
+                knjiga.setAutor(novaKnjigaDto.getAutor());
+                knjigaService.save(knjiga);
                 return ResponseEntity.ok("Knjiga uspesno dodata");
             }
             return new ResponseEntity("Neispravni podaci", HttpStatus.BAD_REQUEST);
@@ -86,6 +93,24 @@ public class AutorRestController {
         else
             return new ResponseEntity<>("Polica nije uklonjena iz baze", HttpStatus.CONFLICT);
     }
+  /*  @PostMapping("/api/dodaj-knjigu")
+    public ResponseEntity<String> dodajKnjigu(@RequestBody KnjigaDto knjigaDto,@PathVariable Long policaId, HttpServletRequest request){
+        if(checkLoginAutor(request)) {
+            Polica polica = policaService.getById(policaId);
+            if (polica != null) {
+                if (policaService.findOne(knjigaDto.getNaslov()) != null) {
+                    return policaService.dodavanjeNaPolicu(knjigaDto.getNaslov(), polica);
+                } else {
+                    return new ResponseEntity<>("Knjiga sa ovim naslovom ne postoji u bazi", HttpStatus.NOT_FOUND);
+                }
+            }else{
+                return new ResponseEntity<>("Polica na koju zelite da dodate knjigu ne postoji", HttpStatus.NOT_FOUND);
+            }
+        }else{
+            return  new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
+        }
+    }
+  */
 
     @GetMapping("/api/policeAutor")
     public ResponseEntity<List<PolicaDto>> getPoliceAutor(HttpSession session){
@@ -106,7 +131,7 @@ public class AutorRestController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/check-user-login-autor")
+    @GetMapping("/api/check-user-login-autor")
     public boolean checkLoginAutor(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
@@ -118,7 +143,7 @@ public class AutorRestController {
             return false;
         }
     }
-    @GetMapping("/check-login-autor")
+    @GetMapping("/api/check-login-autor")
     @ResponseBody
     public boolean checkLoginAutor(HttpSession session) {
         if (session.getAttribute("autor") != null) {
@@ -130,25 +155,15 @@ public class AutorRestController {
         }
     }
     @PostMapping("/api/azurirajKnjige/{id}")
-    public ResponseEntity<String> azuriranjeKnjige(@PathVariable Long id, @RequestBody AzuriranjeKnjigeDto azuriranjeProfilaDto, HttpSession session){
-        if(!checkLoginAutor(session)){
-            return new ResponseEntity<>("Niste ulogovani.", HttpStatus.FORBIDDEN);
+    public ResponseEntity<String> azuriranjeKnjige(@PathVariable Long id, @RequestBody AzuriranjeKnjigeDto azuriranjeKnjigeDto, HttpSession session){
+        if (checkLoginAutor(session)) {
+            Uloga uloga = (Uloga) session.getAttribute("uloga");
+            if (uloga == Uloga.AUTOR) {
+                knjigaService.azuriranjeKnjige(id, azuriranjeKnjigeDto);
+            }
+            return new ResponseEntity<>("Samo autori imaju pristup", HttpStatus.BAD_REQUEST);
         }
-        Knjiga knjiga = knjigaRepository.getById(id);
-
-        if(knjiga == null){
-            return new ResponseEntity<>("Knjiga nije pronadjena.", HttpStatus.NOT_FOUND);
-        }
-
-
-        knjiga.setNaslov(azuriranjeProfilaDto.getNaslov());
-        knjiga.setNaslovnaFotografija(azuriranjeProfilaDto.getNaslovnaFotografija());
-        knjiga.setOpis(azuriranjeProfilaDto.getOpis());
-
-
-        Knjiga azuriranaKnjiga = knjigaService.azuriranjeKnjige(knjiga);
-        return new ResponseEntity<>("Knjiga uspesno azurirana", HttpStatus.OK);
-
+        return new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
     }
 
 }
