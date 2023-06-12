@@ -146,7 +146,7 @@ public class KorisnikRestController {
         return new ResponseEntity<>("Niste ulogovani", HttpStatus.OK);
     }
 
-    @PostMapping("/api/azurirajProfil/{korisnickoIme")
+    @PostMapping("/api/azurirajProfil/{korisnickoIme}")
     public ResponseEntity<String> azuriranjeProfila(@PathVariable String korisnickoIme, @RequestBody AzuriranjeProfilaDto azuriranjeProfilaDto, HttpSession session){
         if(!checkLogin(session)){
             return new ResponseEntity<>("Niste ulogovani.", HttpStatus.FORBIDDEN);

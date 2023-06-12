@@ -155,7 +155,7 @@ public class AutorRestController {
     @GetMapping("/api/check-login-autor")
     @ResponseBody
     public boolean checkLoginAutor(HttpSession session) {
-        if (session.getAttribute("autor") != null) {
+        if (session.getAttribute("korisnik") != null) {
             // User is logged in
             return true;
         } else {
