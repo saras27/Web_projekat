@@ -163,7 +163,7 @@ public class AdminController {
     @GetMapping("/api/check-login-admin")
     @ResponseBody
     public boolean checkLogin(HttpSession session) {
-        if (session.getAttribute("korisnik") != null && session != null) {
+        if (session.getAttribute("administrator") != null && session != null) {
             return true;
         } else {
             return false;
