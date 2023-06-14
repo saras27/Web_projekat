@@ -3,10 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.*;
 import com.example.demo.entity.*;
 import com.example.demo.repository.AutorRepository;
-import com.example.demo.service.KnjigaService;
-import com.example.demo.service.KorisnikService;
-import com.example.demo.service.AdminService;
-import com.example.demo.service.ZanrService;
+import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +20,8 @@ public class AdminController {
     private KorisnikService korisnikService;
     @Autowired
     private AutorRepository autorRepository;
+    @Autowired
+    private AutorService autorService;
     @Autowired
     private KnjigaService knjigaService;
     @Autowired
@@ -80,50 +79,44 @@ public class AdminController {
         }
         return new ResponseEntity<>("Niste ulogovani", HttpStatus.BAD_REQUEST);
     }
+
+    //radi
     @PostMapping("/api/dodajZanr")
     public ResponseEntity<String> dodavanjeZanra(@RequestBody NoviZanrDto zanrDto, HttpSession session){
-        if (checkLogin(session)) {
-            Uloga uloga = (Uloga) session.getAttribute("uloga");
-            if(uloga == Uloga.ADMINISTRATOR){
-                Zanr noviZanr = new Zanr();
-                noviZanr.setNaziv(zanrDto.getNaziv());
-                return zanrService.dodavanjeZanra(noviZanr);
-            }
-            return new ResponseEntity<>("Samo administratori imaju pristup", HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>("Niste ulogovani", HttpStatus.BAD_REQUEST);
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (loggedKorisnik.getUloga() == Uloga.ADMINISTRATOR) {
 
+            return zanrService.dodavanjeZanra(zanrDto);
+
+            }else
+            return new ResponseEntity<>("Samo administratori imaju pristup", HttpStatus.BAD_REQUEST);
     }
     @PostMapping("/api/dodajKnjigu-admin")
-    public ResponseEntity<String> dodavanjeKnjiga(@RequestBody NovaKnjigaDto novaKnjigaDto, HttpSession session){
+    public ResponseEntity<String> dodavanjeKnjiga(@RequestBody KnjigaDto novaKnjigaDto, HttpSession session){
         if(checkLogin(session)) {
-            if (knjigaService.findKnjigu(novaKnjigaDto.getNaslov()) != null && novaKnjigaDto.getNaslov() != " ") {
-                System.out.println("Knjiga sa ovim imenom vec postoji ili ste uneli prazan string.");
-            } else {
-                Knjiga knjiga = new Knjiga();
-                knjiga.setNaslov(novaKnjigaDto.getNaslov());
-                knjiga.setNaslovnaFotografija(novaKnjigaDto.getNaslovnaFotografija());
-                knjiga.setISBN(novaKnjigaDto.getISBN());
-                knjiga.setDatumObjavljivanja(novaKnjigaDto.getDatumObjavljivanja());
-                knjiga.setBrojStrana(novaKnjigaDto.getBrojStrana());
-                knjiga.setOpis(novaKnjigaDto.getOpis());
-                knjiga.setZanr(novaKnjigaDto.getZanr());
-                knjiga.setAutor(novaKnjigaDto.getAutor());
-                knjigaService.save(knjiga);
-                return ResponseEntity.ok("Knjiga uspesno dodata");
-            }
-            return new ResponseEntity("Neispravni podaci", HttpStatus.BAD_REQUEST);
+            Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+            if(loggedKorisnik.getUloga() == Uloga.ADMINISTRATOR){
+                if (knjigaService.findKnjigu(novaKnjigaDto.getNaslov()) != null && novaKnjigaDto.getNaslov() != " ") {
+                    System.out.println("Knjiga sa ovim imenom vec postoji ili ste uneli prazan string.");
+                } else {
+                    knjigaService.dodavanjeKnjige(novaKnjigaDto, loggedKorisnik.getId());
+                    return ResponseEntity.ok("Knjiga uspesno dodata");
+                }
+                return new ResponseEntity("Neispravni podaci", HttpStatus.BAD_REQUEST);
+            }return new ResponseEntity<>("Samo admin ima pristup", HttpStatus.UNAUTHORIZED);
         } else{
             return  new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
         }
     }
 
+    //radi
     @PostMapping("/api/azuriranjeKnjige-admin/{id}")
     public ResponseEntity<String> azuriranjeKnjiga(@RequestBody AzuriranjeKnjigeDto azuriranjeKnjigeDto, @PathVariable Long id, HttpSession session) {
         if (checkLogin(session)) {
-            Uloga uloga = (Uloga) session.getAttribute("uloga");
-            if (uloga == Uloga.ADMINISTRATOR) {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            if (korisnik.getUloga() == Uloga.ADMINISTRATOR) {
                 knjigaService.azuriranjeKnjige(id, azuriranjeKnjigeDto);
+                return new ResponseEntity<>("Azurirana", HttpStatus.OK);
             }
             return new ResponseEntity<>("Samo administratori imaju pristup", HttpStatus.BAD_REQUEST);
         }
@@ -134,9 +127,10 @@ public class AdminController {
     @PostMapping("/api/brisanjeKnjige-admin/{id}")
     public ResponseEntity<String> brisanjeKnjiga(@PathVariable Long id, HttpSession session) {
         if (checkLogin(session)) {
-            Uloga uloga = (Uloga) session.getAttribute("uloga");
-            if (uloga == Uloga.ADMINISTRATOR) {
+           Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            if (korisnik.getUloga() == Uloga.ADMINISTRATOR) {
                 knjigaService.brisanjeKnjigeAdmin(id);
+                return new ResponseEntity<>("Azurirana", HttpStatus.OK);
             }
             return new ResponseEntity<>("Samo administratori imaju pristup", HttpStatus.BAD_REQUEST);
         }
@@ -144,27 +138,26 @@ public class AdminController {
 
     }
 
-    @PostMapping("/api/azurirajProfil-admin/{id}")
-    public ResponseEntity<String> azuriranjeProfila(@RequestBody AzuriranjeProfilaDto azuriranjeProfilaDto, @PathVariable Long id, HttpSession session){
-        if (checkLogin(session)) {
-            Uloga uloga = (Uloga) session.getAttribute("uloga");
-            if (uloga == Uloga.ADMINISTRATOR) {
-                Autor autor = autorRepository.getAutorById(id);
-                if(autor.isAktivan() == false){
+    //prosledi id autora da bi se njegov profil azurirao
 
-                }
-                return new ResponseEntity<>("Ne mozete azurirati profil koji je aktivan", HttpStatus.BAD_REQUEST);
-            }
-            return new ResponseEntity<>("Samo administratori imaju pristup", HttpStatus.BAD_REQUEST);
+    @PostMapping("/api/azurirajProfil-admin/{id}")
+    public ResponseEntity<String> azuriranjeProfila(@PathVariable Long id,@RequestBody AzuriranjeProfilaDto azuriranjeProfilaDto,HttpSession session){
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        Long userId = null;
+        if(korisnik == null){
+            return new ResponseEntity<>("Nema sesije, potrebno logovanje", HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
+        if(korisnik.getUloga() == Uloga.AUTOR || korisnik.getUloga() == Uloga.ADMINISTRATOR){
+            return autorService.azuriraj(azuriranjeProfilaDto, id);
+        }
+        return ResponseEntity.badRequest().body("Doslo je do greske, niste autor niti administrator");
 
     }
 
     @GetMapping("/api/check-login-admin")
     @ResponseBody
     public boolean checkLogin(HttpSession session) {
-        if (session.getAttribute("administrator") != null && session != null) {
+        if (session.getAttribute("korisnik") != null) {
             return true;
         } else {
             return false;

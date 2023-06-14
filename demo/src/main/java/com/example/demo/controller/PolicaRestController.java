@@ -31,6 +31,8 @@ public class PolicaRestController {
     @Autowired
     private PolicaService policaService;
 
+
+    //drugi put kad se napravi polica sa istim imenom ne radi, prvi put radi
     @PostMapping("/api/dodajPolicu")
     public ResponseEntity<String> novaPolica(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request,HttpSession session){
         if(checkLogin(request)) {
@@ -46,6 +48,7 @@ public class PolicaRestController {
         }
     }
 
+    //radi
     @GetMapping("/api/police")
     public ResponseEntity<List<PolicaDto>> getPolice(HttpSession session){
         List<Polica> police = policaService.findAll();
@@ -78,7 +81,7 @@ public class PolicaRestController {
         }
     }
 
-    @PostMapping("/api/dodaj-knjigu{imePolice}")
+    @PostMapping("/api/dodaj-knjigu/{imePolice}")
     public ResponseEntity<String> dodajKnjigu(@RequestBody NovaKnjigaDto novaknjigaDto,@PathVariable String naziv, HttpServletRequest req, HttpSession session){
         if(checkLogin(req)) {
                 if (policaService.findOne(novaknjigaDto.getNaslov()) != null && novaknjigaDto.getNaslov() != " ") {

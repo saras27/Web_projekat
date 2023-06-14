@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.NoviZanrDto;
 import com.example.demo.entity.Recenzija;
 import com.example.demo.entity.Zanr;
 import com.example.demo.repository.RecenzijaRepository;
@@ -24,11 +25,13 @@ public class ZanrService {
         return zanrRepository.save(zanr);
     }
 
-    public ResponseEntity<String> dodavanjeZanra(Zanr zanr){
-        if(zanrRepository.existsByNaziv(zanr)){
-            return new ResponseEntity<>("Zanr sa ovim imenom vec postoji", HttpStatus.BAD_REQUEST);
-        }
-        zanrRepository.save(zanr);
-        return new ResponseEntity<>("Zanr je dodat u bazu", HttpStatus.OK);
+    public ResponseEntity<String> dodavanjeZanra(NoviZanrDto zanr){
+        Zanr zanr1 = new Zanr();
+        zanr1.setNaziv(zanr.getNaziv());
+        if(zanrRepository.existsByNaziv(zanr1.getNaziv()))
+            return new ResponseEntity<>("Zanr sa ovim imenom  vec postoji", HttpStatus.BAD_REQUEST);
+
+        save(zanr1);
+        return new ResponseEntity<>("Zanr uspesno dodat", HttpStatus.OK);
     }
 }

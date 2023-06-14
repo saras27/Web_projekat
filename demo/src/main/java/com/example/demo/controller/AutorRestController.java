@@ -102,24 +102,23 @@ public class AutorRestController {
 
 
     }
-  /*  @PostMapping("/api/dodaj-knjigu")
-    public ResponseEntity<String> dodajKnjigu(@RequestBody KnjigaDto knjigaDto,@PathVariable Long policaId, HttpServletRequest request){
-        if(checkLoginAutor(request)) {
-            Polica polica = policaService.getById(policaId);
-            if (polica != null) {
-                if (policaService.findOne(knjigaDto.getNaslov()) != null) {
-                    return policaService.dodavanjeNaPolicu(knjigaDto.getNaslov(), polica);
+    @PostMapping("/api/dodajKnjigu-autor")
+    public ResponseEntity<String> dodavanjeKnjiga(@RequestBody KnjigaDto knjigaDto, HttpSession session){
+        if(checkLoginAutor(session)) {
+            Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+            if(loggedKorisnik.getUloga() == Uloga.AUTOR || knjigaDto.getAutor().equals(loggedKorisnik)){
+                if (knjigaService.findKnjigu(knjigaDto.getNaslov()) != null && knjigaDto.getNaslov() != " ") {
+                    System.out.println("Knjiga sa ovim imenom vec postoji ili ste uneli prazan string.");
                 } else {
-                    return new ResponseEntity<>("Knjiga sa ovim naslovom ne postoji u bazi", HttpStatus.NOT_FOUND);
+                    knjigaService.dodavanjeKnjige(knjigaDto, loggedKorisnik.getId());
+                    return ResponseEntity.ok("Knjiga uspesno dodata");
                 }
-            }else{
-                return new ResponseEntity<>("Polica na koju zelite da dodate knjigu ne postoji", HttpStatus.NOT_FOUND);
-            }
-        }else{
+                return new ResponseEntity("Neispravni podaci", HttpStatus.BAD_REQUEST);
+            }return new ResponseEntity<>("Samo autor ima pristup", HttpStatus.UNAUTHORIZED);
+        } else{
             return  new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
         }
     }
-  */
 
     @GetMapping("/api/policeAutor")
     public ResponseEntity<List<PolicaDto>> getPoliceAutor(HttpSession session){
@@ -163,12 +162,19 @@ public class AutorRestController {
             return false;
         }
     }
+
+
+    //radi
     @PostMapping("/api/azurirajKnjige/{id}")
     public ResponseEntity<String> azuriranjeKnjige(@PathVariable Long id, @RequestBody AzuriranjeKnjigeDto azuriranjeKnjigeDto, HttpSession session){
         if (checkLoginAutor(session)) {
-            Uloga uloga = (Uloga) session.getAttribute("uloga");
-            if (uloga == Uloga.AUTOR) {
+           Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            if (korisnik.getUloga() == Uloga.AUTOR) {
+                //moram da proverim da li je knjiga tog autora koji zeli da azurira
+                Knjiga knjiga = knjigaRepository.getById(id);
+                if(knjiga.getAutor().getId().equals(korisnik.getId()))
                 knjigaService.azuriranjeKnjige(id, azuriranjeKnjigeDto);
+                return new ResponseEntity<>("Azurirana", HttpStatus.OK);
             }
             return new ResponseEntity<>("Samo autori imaju pristup", HttpStatus.BAD_REQUEST);
         }

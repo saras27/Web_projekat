@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.example.demo.service.KnjigaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,11 +24,10 @@ public class KnjigaRestController {
     public ResponseEntity<List<KnjigaDto>> getKnjige(HttpSession session){
         List<Knjiga> knjige = knjigaService.findAll();
 
-        Knjiga nadjidKnjigu = (Knjiga) session.getAttribute("knjiga");
-        if(nadjidKnjigu == null) {
-            System.out.println("Nema sesije");
+        if(knjige == null) {
+            System.out.println("Nema knjiga u bazi");
         } else {
-            System.out.println(nadjidKnjigu);
+            System.out.println(knjige);
         }
 
         List<KnjigaDto> dtos = new ArrayList<>();
@@ -45,4 +45,6 @@ public class KnjigaRestController {
         session.invalidate();
         return knjigaService.findKnjigu(naslov);
     }
+
+    //dodavanje knjige na policu
 }

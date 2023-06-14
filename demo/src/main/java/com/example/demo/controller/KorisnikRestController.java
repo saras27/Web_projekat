@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.*;
 import com.example.demo.entity.Knjiga;
+import com.example.demo.entity.Uloga;
 import com.example.demo.entity.Korisnik;
 import com.example.demo.entity.Polica;
 import com.example.demo.service.KnjigaService;
@@ -35,6 +36,7 @@ public class KorisnikRestController {
         return "Hello from api!";
     }
 
+    //radi
     @PostMapping("api/login")
     public Set<Polica> login(@RequestBody LoginDto loginDto, HttpSession session){
         // proverimo da li su podaci validni
@@ -44,15 +46,18 @@ public class KorisnikRestController {
         }
 
         Korisnik loggedKorisnik = korisnikService.login(loginDto.getKorisnickoIme());
-        if (loggedKorisnik == null){
+        if (loggedKorisnik == null) {
             System.out.println("User does not exist!");
             return null;
         }
-
         session.setAttribute("korisnik", loggedKorisnik);
+        System.out.println(loggedKorisnik.getUloga());
+        Uloga uloga = (Uloga) session.getAttribute("uloga");
+        //System.out.println(session.getAttribute(uloga.toString()));
         return loggedKorisnik.getPolice();
     }
 
+    //radi
     @GetMapping("/check-login")
     //@ResponseBody
     public boolean checkLogin(HttpSession session) {
@@ -64,38 +69,24 @@ public class KorisnikRestController {
             return false;
         }
     }
-    @GetMapping("/api/{KorisnickoIme}")
-    public Korisnik getKorisnik(@PathVariable(name = "KorisnickoIme") String naslov, HttpSession session){
-        Korisnik korisnik = (Korisnik) session.getAttribute("KorisnickoIme");
-        System.out.println(korisnik);
-        //session.invalidate();
-        return korisnikService.nadjiKorisnik(korisnik.getKorisnickoIme());
+
+    //radi
+    @GetMapping("/api/korisnici/{korisnickoIme}")
+    public Korisnik getKorisnik(@PathVariable(name = "korisnickoIme") String korisnickoIme){
+        Korisnik korisnik = korisnikService.nadjiKorisnik(korisnickoIme);
+        if(korisnik == null)
+            return null;
+
+        return  korisnik;
     }
+
+    //radi
     @PostMapping("api/registracija")
     public ResponseEntity<String> registracija(@RequestBody RegistracijaDto registracijaDto, HttpSession session) {
         if(registracijaDto.getKorisnickoIme().isEmpty() || registracijaDto.getIme().isEmpty() ||
                 registracijaDto.getPrezime().isEmpty() || registracijaDto.getMejl().isEmpty() ||
                 registracijaDto.getLozinka().isEmpty() || registracijaDto.getPotvrda_lozinke().isEmpty())
             return new ResponseEntity("Neispravni podaci za registraciju", HttpStatus.BAD_REQUEST);
-
-
-        /*Scanner in1 = new Scanner(System.in);
-        String ime = in1.nextLine();
-
-        Scanner in2 = new Scanner(System.in);
-        String prezime = in2.nextLine();
-
-        Scanner in3 = new Scanner(System.in);
-        String korisnickoIme = in3.nextLine();
-
-        Scanner in4 = new Scanner(System.in);
-        String mejl = in4.nextLine();
-
-        Scanner in5 = new Scanner(System.in);
-        String lozinka = in5.nextLine();
-    //lozinka treba da se unese 2 puta radi potvrde
-        Scanner in6 = new Scanner(System.in);
-        String potvrda = in6.nextLine();*/
 
         if(registracijaDto.getLozinka().equals(registracijaDto.getPotvrda_lozinke()))
         {
@@ -115,6 +106,8 @@ public class KorisnikRestController {
         }
     }
 
+
+    //ne radi
     @PostMapping("/api/obrisiPolicu-prijavljenikorisnik")
     public ResponseEntity<String> obrisiPolicu(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -136,6 +129,7 @@ public class KorisnikRestController {
 
     }
 
+    //radi
     @PostMapping("/api/dodajPolicu-prijavljenikorisnik")
     public ResponseEntity<String> dodajPolicu(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -146,6 +140,8 @@ public class KorisnikRestController {
         return new ResponseEntity<>("Niste ulogovani", HttpStatus.OK);
     }
 
+
+    //radi
     @PostMapping("/api/azurirajProfil/{korisnickoIme}")
     public ResponseEntity<String> azuriranjeProfila(@PathVariable String korisnickoIme, @RequestBody AzuriranjeProfilaDto azuriranjeProfilaDto, HttpSession session){
         if(!checkLogin(session)){
@@ -157,8 +153,8 @@ public class KorisnikRestController {
             return new ResponseEntity<>("Korisnik nije pronadjen.", HttpStatus.NOT_FOUND);
         }
 
-        String loggedInUsername = (String) session.getAttribute("ulogovaniKorisnik");
-        if(!loggedInUsername.equals(korisnik.getKorisnickoIme())){
+        Korisnik loggedInUsername = (Korisnik) session.getAttribute("korisnik");
+        if(!loggedInUsername.getKorisnickoIme().equals(korisnik.getKorisnickoIme())){
             return new ResponseEntity<>("Ne mozete menjati profil drugog korisnika", HttpStatus.FORBIDDEN);
         }
 //nisam proverila da li je neki od podataka prazan, npr ako hoce samo da promeni opis profila
@@ -173,7 +169,7 @@ public class KorisnikRestController {
 
     }
 
-
+    //radi
     @PostMapping("api/logout")
     public ResponseEntity<String> Logout(HttpSession session){
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");

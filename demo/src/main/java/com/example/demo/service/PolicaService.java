@@ -48,8 +48,8 @@ public class PolicaService {
     public List<Polica> findAll(){return policaRepository.findAll();}
 
     public ResponseEntity<String> save(String imePolice, Korisnik korisnik){
-        Polica polica = policaRepository.getPolicaByNaziv(imePolice);
-        if(findOne(imePolice) != null){
+        Polica dbpolica = findOne(imePolice);
+        if(dbpolica != null){
             return new ResponseEntity<>("Dodavanje police nije moguce, postoji polica sa tim imenom", HttpStatus.BAD_REQUEST);
         }else {
             if(imePolice.equals("Read") || imePolice.equals("Want to Read") || imePolice.equals("Currently Reading")) {

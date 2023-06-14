@@ -4,6 +4,6 @@ import com.example.demo.entity.Zanr;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ZanrRepository extends JpaRepository<Zanr, Long> {
-    boolean existsByNaziv(Zanr zanr);
+    boolean existsByNaziv(String naziv);
 }
 
