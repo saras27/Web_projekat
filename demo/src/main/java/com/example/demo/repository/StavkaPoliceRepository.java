@@ -13,5 +13,6 @@ public interface StavkaPoliceRepository extends JpaRepository<StavkaPolice, Long
     StavkaPolice existsByKnjiga_Id(Long id);
     StavkaPolice getStavkaPoliceByKnjiga(Knjiga knjiga);
 
+
 }
 

@@ -2,14 +2,18 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.KnjigaDto;
 import com.example.demo.entity.Knjiga;
+import com.example.demo.entity.Korisnik;
 import com.example.demo.entity.Recenzija;
 import com.example.demo.service.KnjigaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.service.RecenzijaService;
 import com.example.demo.dto.RecenzijaDto;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
@@ -38,5 +42,15 @@ public class RecenzijaRestController {
             dtos.add(dto);
         }
         return ResponseEntity.ok(dtos);
+    }
+
+    @PostMapping("/api/dodaj-recenziju/{id}")
+    public ResponseEntity<String> dodajRecenziju(RecenzijaDto recenzijaDto, @PathVariable Long id, HttpSession session){
+        Recenzija recenzija = new Recenzija();
+        Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if(loggedKorisnik != null){
+            recenzijaService.addRecenzija(recenzijaDto, loggedKorisnik, id);
+        }
+        return  new ResponseEntity<>("Niste ulogovani", HttpStatus.FORBIDDEN);
     }
 }

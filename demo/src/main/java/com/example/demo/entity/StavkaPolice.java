@@ -39,6 +39,14 @@ public class StavkaPolice implements Serializable {
         return knjiga;
     }
 
+    public Recenzija getRecenzije() {
+        return recenzije;
+    }
+
+    public void setRecenzije(Recenzija recenzije) {
+        this.recenzije = recenzije;
+    }
+
     @Override
     public String toString() {
         return "Stavka{" +
