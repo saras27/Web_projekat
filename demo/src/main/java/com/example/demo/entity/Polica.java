@@ -18,7 +18,7 @@ public class Polica implements Serializable {
     private String naziv;
     @Column
     private boolean primarna;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)///////////
     @JoinTable(name = "police_stavke",
             joinColumns = @JoinColumn(name = "polica_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "stavka_id", referencedColumnName = "id"))

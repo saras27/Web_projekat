@@ -86,7 +86,7 @@ public class AdminController {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (loggedKorisnik.getUloga() == Uloga.ADMINISTRATOR) {
 
-            return zanrService.dodavanjeZanra(zanrDto);
+             return zanrService.dodavanjeZanra(zanrDto);
 
             }else
             return new ResponseEntity<>("Samo administratori imaju pristup", HttpStatus.BAD_REQUEST);
@@ -152,6 +152,20 @@ public class AdminController {
         }
         return ResponseEntity.badRequest().body("Doslo je do greske, niste autor niti administrator");
 
+    }
+
+    //valjda ga doda
+    @PostMapping("/api/dodaj-autora")
+    public ResponseEntity<String> kreiranjeAutora(@RequestBody AutorDto autorDto, HttpSession session){
+        if (checkLogin(session)) {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            if (korisnik.getUloga() == Uloga.ADMINISTRATOR) {
+                adminService.dodajAutora(autorDto);
+                return ResponseEntity.ok("Autor dodat u bazu.");
+            }
+            return ResponseEntity.badRequest().body("Niste administrator");
+        }
+        return ResponseEntity.badRequest().body("Niste ulogovani");
     }
 
     @GetMapping("/api/check-login-admin")

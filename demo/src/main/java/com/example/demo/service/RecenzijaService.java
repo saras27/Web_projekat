@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,14 @@ public class RecenzijaService {
     public List<Recenzija> findAll(){
         return recenzijaRepository.findAll();
     }
+    public Recenzija findRecenziju(Long id){
+        Optional<Recenzija> dbRecenzija = recenzijaRepository.findById(id);
+        if(!dbRecenzija.isPresent()){
+            return null;
+        }
+        Recenzija recenzija = dbRecenzija.get();
+        return recenzija;
+    }
 
     public Recenzija save(Recenzija recenzija){
         return recenzijaRepository.save(recenzija);
@@ -47,11 +56,13 @@ public class RecenzijaService {
         Recenzija recenzija = new Recenzija();
         recenzija.setOcena(recenzijaDto.getOcena());
         recenzija.setTekst(recenzijaDto.getTekst());
-        recenzija.setDatumRecenzije(recenzijaDto.getDatumRecenzije());
+        recenzija.setDatumRecenzije(LocalDate.now());
+        recenzijaRepository.save(recenzija);
         recenzija.setKorisnik(korisnik);
-        save(recenzija);
-        stavka.setRecenzije(recenzija);
-        stavkaPoliceRepository.save(stavka);
+        recenzija.setStavka(stavka);
+        recenzijaRepository.save(recenzija);
+        //stavka.setRecenzije(recenzija);
+        //stavkaPoliceRepository.save(stavka);
         korisnikRepository.save(korisnik);
         return new ResponseEntity<>("Recenzija je dodata", HttpStatus.OK);
     }

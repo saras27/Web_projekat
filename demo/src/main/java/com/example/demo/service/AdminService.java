@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.AutorDto;
 import com.example.demo.dto.AzuriranjeProfilaDto;
 import com.example.demo.entity.*;
 import com.example.demo.repository.AutorRepository;
@@ -43,7 +44,18 @@ public class AdminService {
         autorRepository.save(noviAutor);
         return new ResponseEntity<>("Profil autora je aktiviran", HttpStatus.OK);
     }
-
+    public ResponseEntity<String> dodajAutora(AutorDto autorDto){
+        Autor noviAutor = new Autor();
+        noviAutor.setAktivan(false);
+        noviAutor.setUloga(Uloga.AUTOR);
+        noviAutor.setSlika(autorDto.getSlika());
+        noviAutor.setDatumRodjenja(autorDto.getDatumRodjenja());
+        noviAutor.setOpis(autorDto.getOpis());
+        noviAutor.setPrezime(autorDto.getPrezime());
+        noviAutor.setIme(autorDto.getIme());
+        autorRepository.save(noviAutor);
+        return ResponseEntity.ok("Autor dodat u bazu.");
+    }
     public ResponseEntity<String> azuriraj(Autor autor, AzuriranjeProfilaDto azuriranjeProfilaDto){
         autor.setIme(azuriranjeProfilaDto.getIme());
         autor.setPrezime(azuriranjeProfilaDto.getPrezime());

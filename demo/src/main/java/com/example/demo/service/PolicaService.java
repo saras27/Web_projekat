@@ -46,10 +46,11 @@ public class PolicaService {
     }
 
     public List<Polica> findAll(){return policaRepository.findAll();}
+    //public List<Polica> findAllPoImenu(String ime){return policaRepository.find;}
 
     public ResponseEntity<String> save(String imePolice, Korisnik korisnik){
-        Polica dbpolica = findOne(imePolice);
-        if(dbpolica != null){
+        List<Polica> dbpolica = policaRepository.findAllByNazivAndKorisnik(imePolice, korisnik);
+        if(dbpolica != null && !dbpolica.isEmpty()){
             return new ResponseEntity<>("Dodavanje police nije moguce, postoji polica sa tim imenom", HttpStatus.BAD_REQUEST);
         }else {
             if(imePolice.equals("Read") || imePolice.equals("Want to Read") || imePolice.equals("Currently Reading")) {
@@ -62,7 +63,7 @@ public class PolicaService {
             Polica polica1 = new Polica(imePolice, false);
             korisnik.getPolice().add(polica1);
             korisnikRepository.save(korisnik);
-            policaRepository.save(polica1);
+            //policaRepository.save(polica1);
             return new ResponseEntity("Polica je uspesno dodata", HttpStatus.OK);
 
         }

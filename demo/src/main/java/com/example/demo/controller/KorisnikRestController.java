@@ -1,10 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.*;
-import com.example.demo.entity.Knjiga;
-import com.example.demo.entity.Uloga;
-import com.example.demo.entity.Korisnik;
-import com.example.demo.entity.Polica;
+import com.example.demo.entity.*;
+import com.example.demo.repository.PolicaRepository;
 import com.example.demo.service.KnjigaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PolicaService;
@@ -30,6 +28,8 @@ public class KorisnikRestController {
 
     @Autowired
     private PolicaService policaService;
+    @Autowired
+    private PolicaRepository policaRepository;
 
     @GetMapping("/api/")
     public String welcome(){
@@ -69,15 +69,37 @@ public class KorisnikRestController {
             return false;
         }
     }
+    @GetMapping("/api/korisnici")
+    public ResponseEntity<List<KorisnikDto>> getKorisnici(HttpSession session){
+        List<Korisnik> korisnikList = korisnikService.findAll();
+
+        if(korisnikList == null) {
+            System.out.println("Nema korisnika u bazi");
+        } else {
+            System.out.println(korisnikList);
+        }
+
+        List<KorisnikDto> dtos = new ArrayList<>();
+        for(Korisnik korisnik : korisnikList){
+            KorisnikDto dto = new KorisnikDto(korisnik);
+            dtos.add(dto);
+        }
+        return ResponseEntity.ok(dtos);
+    }
 
     //radi
-    @GetMapping("/api/korisnici/{korisnickoIme}")
+    @GetMapping("/api/korisnici/poImenu/{korisnickoIme}")
     public Korisnik getKorisnik(@PathVariable(name = "korisnickoIme") String korisnickoIme){
         Korisnik korisnik = korisnikService.nadjiKorisnik(korisnickoIme);
         if(korisnik == null)
             return null;
 
         return  korisnik;
+    }
+    @GetMapping("/api/korisnici/{id}")
+    public Korisnik KorisnikById(@PathVariable Long id, HttpSession session){
+
+        return korisnikService.getById(id);
     }
 
     //radi
@@ -112,19 +134,15 @@ public class KorisnikRestController {
     public ResponseEntity<String> obrisiPolicu(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-        Polica polica = policaService.getByNaziv(novaPolicaDto.getNaziv());
+        Polica polica = policaRepository.getPolicaByNazivAndKorisnik(novaPolicaDto.getNaziv(), prijavljeniKorisnik);
         if(polica == null)
             return new ResponseEntity<>("Polica sa datim imenom ne postoji", HttpStatus.NOT_FOUND);
 
         if(polica.isPrimarna()){
             return new ResponseEntity<>("Brisanje primarne police nije dozvoljeno", HttpStatus.FORBIDDEN);
         }
-
-        Korisnik korisnikIzBaze = korisnikService.getByKorisnickoIme(prijavljeniKorisnik.getKorisnickoIme());
-        korisnikIzBaze.getPolice().remove(polica);
-        Korisnik korisnik = korisnikService.save(korisnikIzBaze);
-        policaService.delete(polica);
-
+        policaRepository.deletePolicaByNazivAndKorisnik(novaPolicaDto.getNaziv(), prijavljeniKorisnik);
+        korisnikService.save(prijavljeniKorisnik);
         return new ResponseEntity<>("Polica uspesno obrisana", HttpStatus.OK);
 
     }
@@ -132,7 +150,7 @@ public class KorisnikRestController {
     //radi
     @PostMapping("/api/dodajPolicu-prijavljenikorisnik")
     public ResponseEntity<String> dodajPolicu(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request) {
-        HttpSession session = request.getSession();
+         HttpSession session = request.getSession();
         if (checkLogin(session)) {
             Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
             return policaService.save(novaPolicaDto.getNaziv(), prijavljeniKorisnik);

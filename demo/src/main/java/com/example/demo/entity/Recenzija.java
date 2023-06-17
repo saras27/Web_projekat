@@ -65,6 +65,14 @@ public class Recenzija implements Serializable {
         this.korisnik = korisnik;
     }
 
+    public StavkaPolice getStavka() {
+        return stavka;
+    }
+
+    public void setStavka(StavkaPolice stavka) {
+        this.stavka = stavka;
+    }
+
     @Override
     public String toString() {
         return "Recenzija{" +
