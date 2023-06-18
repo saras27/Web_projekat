@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 
 import com.example.demo.controller.RecenzijaRestController;
+import com.example.demo.dto.RecenzijaDto;
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class PolicaService {
         }
     }
 
+
     public List<Polica> findAll(){return policaRepository.findAll();}
     //public List<Polica> findAllPoImenu(String ime){return policaRepository.find;}
 
@@ -77,29 +79,33 @@ public class PolicaService {
         }
         return false;
     }
-    public ResponseEntity<String> dodavanjeNaPolicu(String imeKnjige, Polica polica, Long id){
-        Polica read = policaRepository.findPolicaByNazivAndKorisnik_Id("Read", id);
-        Polica reading = policaRepository.findPolicaByNazivAndKorisnik_Id("Currently Reading", id);
-        Polica wantToRead = policaRepository.findPolicaByNazivAndKorisnik_Id("Want to Read", id);
-        Knjiga novaKnjiga = knjigaRepository.getByNaslov(imeKnjige);
-        StavkaPolice stavkaPolice = stavkaPoliceRepository.getStavkaPoliceByKnjiga(novaKnjiga);
-        if(containsStavka(novaKnjiga.getId(), read) || containsStavka(novaKnjiga.getId(), reading) ||containsStavka(novaKnjiga.getId(), wantToRead)){
+    public ResponseEntity<String> dodavanjeNaPolicu(Knjiga knjiga, Polica polica, Long idKorisnik, Recenzija recenzija){
+        Polica read = policaRepository.findPolicaByNazivAndKorisnik_Id("Read", idKorisnik);
+        Polica reading = policaRepository.findPolicaByNazivAndKorisnik_Id("Currently Reading", idKorisnik);
+        Polica wantToRead = policaRepository.findPolicaByNazivAndKorisnik_Id("Want to Read", idKorisnik);
+        //Knjiga novaKnjiga = knjigaRepository.getByNaslov(imeKnjige);
+        StavkaPolice stavkaPolice = new StavkaPolice();
+        if(containsStavka(knjiga.getId(), read) || containsStavka(knjiga.getId(), reading) ||containsStavka(knjiga.getId(), wantToRead)){
             if(polica.isPrimarna()){
                 return new ResponseEntity("Ne mozete dodati knjigu na vise od jedne primarne police", HttpStatus.BAD_REQUEST);
-            }else{
-                stavkaPolice.setKnjiga(novaKnjiga);
+            } else{
+                stavkaPolice.setKnjiga(knjiga);
                 polica.setStavka(stavkaPolice);
                 policaRepository.save(polica);
                 return ResponseEntity.ok("Knjiga dodata na policu");
             }
-        } if(polica.isPrimarna()){
+        } else if(polica.isPrimarna()){
             if(polica.equals(read)){
-                //recenzija dijalog
-
+                stavkaPolice.setKnjiga(knjiga);
+                if(recenzija != null){
+                    stavkaPolice.setRecenzije(recenzija);
+                }
+                polica.setStavka(stavkaPolice);
+                policaRepository.save(polica);
                 return ResponseEntity.ok("Knjiga dodata na policu");
 
-            }else{
-                stavkaPolice.setKnjiga(novaKnjiga);
+            } else{
+                stavkaPolice.setKnjiga(knjiga);
                 polica.setStavka(stavkaPolice);
                 policaRepository.save(polica);
                 return ResponseEntity.ok("Knjiga dodata na policu");
@@ -116,4 +122,6 @@ public class PolicaService {
     public void delete(Polica polica){
         policaRepository.delete(polica);
     }
+
+
 }

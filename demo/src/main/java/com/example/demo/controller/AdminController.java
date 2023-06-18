@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.dto.*;
 import com.example.demo.entity.*;
 import com.example.demo.repository.AutorRepository;
+import com.example.demo.repository.KorisnikRepository;
+import com.example.demo.repository.ZahtevZaAktivacijuRepository;
 import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,12 +14,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class AdminController {
     @Autowired
     private KorisnikService korisnikService;
+
     @Autowired
     private AutorRepository autorRepository;
     @Autowired
@@ -28,34 +32,40 @@ public class AdminController {
     private AdminService adminService;
     @Autowired
     private ZanrService zanrService;
+    @Autowired
+    private ZahtevZaAktivacijuRepository zahtevZaAktivacijuRepository;
     @GetMapping("/api/zahtevi")
     ResponseEntity<?> listaZahteva(HttpSession session){
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
         if(korisnik == null){
             System.out.println("Nema sesije");
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
         }
 
             if(korisnik.getUloga() == Uloga.ADMINISTRATOR){
             List<ZahtevZaAktivaciju> sviZahtevi = adminService.findAll();
-            List<AktivacijaAutoraDto> naCekanju = null;
+            List<AktivacijaAutoraDto> naCekanju = new ArrayList<>();
             for (ZahtevZaAktivaciju z : sviZahtevi) {
                 if(z.getStatus() == Status.CEKANJE) {
-                    AktivacijaAutoraDto zahtev = new AktivacijaAutoraDto();
-                    naCekanju.add(zahtev);
+                    AktivacijaAutoraDto responseZahtev = new AktivacijaAutoraDto(z.getEmail(), z.getTelefon(), z.getPoruka());
+                    naCekanju.add(responseZahtev);
                 }
             }
             return ResponseEntity.ok(naCekanju);
             }
         System.out.println("Samo administratori imaju pristup zahtevima");
-        return null;
+        return new ResponseEntity("Niste admin", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/api/posalji-zahtev")
-    public ResponseEntity<String> posaljiZahtev(@RequestBody AktivacijaAutoraDto aktivacijaAutoraDto, HttpSession session){
+    public ResponseEntity<?> posaljiZahtev(@RequestBody AktivacijaAutoraDto aktivacijaAutoraDto, HttpSession session){
         if(checkLogin(session)){
             return new ResponseEntity<>("Ne mozete podneti zahtev ukoliko ste ulogovani", HttpStatus.FORBIDDEN);
         }else{
+            Autor autor = autorRepository.getAutorByMejlAdresa(aktivacijaAutoraDto.getEmail());
+            if(autor == null){
+                return new ResponseEntity<>("Autor sa ovim emailom nije pronadjen", HttpStatus.BAD_REQUEST);
+            }
             ZahtevZaAktivaciju zahtevZaAktivaciju = new ZahtevZaAktivaciju();
             zahtevZaAktivaciju.setEmail(aktivacijaAutoraDto.getEmail());
             zahtevZaAktivaciju.setPoruka(aktivacijaAutoraDto.getPoruka());
@@ -70,10 +80,18 @@ public class AdminController {
 
     @PostMapping("/api/{id}")
     public ResponseEntity<String> odgovorNaZahtev(@PathVariable Long id,@RequestBody OdgovorNaZahtevDto odgovor, HttpSession session){
-        if (!checkLogin(session)) {
-            Uloga uloga = (Uloga) session.getAttribute("uloga");
-            if(uloga == Uloga.ADMINISTRATOR){
-                return adminService.odgovor(odgovor.isPrihvacen(),id);
+        if (checkLogin(session)) {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            if(korisnik.getUloga() == Uloga.ADMINISTRATOR){
+                ZahtevZaAktivaciju zahtev = zahtevZaAktivacijuRepository.getZahtevZaAktivacijuById(id);
+                if(zahtev == null)
+                    return new ResponseEntity<>("Zahtev nije pronadjen", HttpStatus.BAD_REQUEST);
+
+                Autor autor = autorService.getAutorByEmail(zahtev.getEmail());
+                if(autor == null || autor.isAktivan() || autor.getUloga() != Uloga.AUTOR){
+                    return new ResponseEntity<>("Autor sa navedenim emailom nije pronadjen ili je nalog aktivan", HttpStatus.BAD_REQUEST);
+                }
+                return adminService.odgovor(odgovor.isPrihvacen(),zahtev, autor);
             }
             return new ResponseEntity<>("Samo administratori imaju pristup", HttpStatus.BAD_REQUEST);
         }

@@ -5,6 +5,15 @@ public class AktivacijaAutoraDto {
     private String telefon;
     private String poruka;
 
+    public AktivacijaAutoraDto() {
+    }
+
+    public AktivacijaAutoraDto(String email, String telefon, String poruka) {
+        this.email = email;
+        this.telefon = telefon;
+        this.poruka = poruka;
+    }
+
     public String getEmail() {
         return email;
     }

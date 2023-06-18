@@ -43,6 +43,14 @@ public class KorisnikService {
         return null;
     }
 
+    public Korisnik getKorisnikByEmail(String email){
+        Optional<Korisnik> foundKorisnik = Optional.ofNullable(korisnikRepository.getKorisnikByMejlAdresa(email));
+        if (foundKorisnik.isPresent())
+            return foundKorisnik.get();
+
+        return null;
+    }
+
     public List<Korisnik> findAll(){
         return korisnikRepository.findAll();
     }
@@ -80,11 +88,12 @@ public class KorisnikService {
             korisnik1.setMejlAdresa(mejl);
             korisnik1.setLozinka(lozinka);
 
-
+            korisnikRepository.save(korisnik1);
             policaService.save("Read", korisnik1);
             policaService.save("Currently Reading", korisnik1);
             policaService.save("Want to Read", korisnik1);
-            return korisnikRepository.save(korisnik1);
+            return korisnik1;
+            //return korisnikRepository.save(korisnik1);
         }
         else
             return null;

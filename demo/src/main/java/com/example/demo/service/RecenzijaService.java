@@ -66,4 +66,12 @@ public class RecenzijaService {
         korisnikRepository.save(korisnik);
         return new ResponseEntity<>("Recenzija je dodata", HttpStatus.OK);
     }
+    public Recenzija createModelFromDto(RecenzijaDto dto){
+        Recenzija recenzija = new Recenzija();
+        recenzija.setKorisnik(dto.getKorisnik());
+        recenzija.setDatumRecenzije(dto.getDatumRecenzije());
+        recenzija.setTekst(dto.getTekst());
+        recenzija.setOcena(dto.getOcena());
+        return recenzija;
+    }
 }

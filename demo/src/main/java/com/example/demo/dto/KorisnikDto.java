@@ -10,7 +10,7 @@ public class KorisnikDto {
     private String mejlAdresa;
 
     public KorisnikDto(Korisnik korisnik) {
-        this.ime = korisnik.getKorisnickoIme();
+        this.ime = korisnik.getIme();
         this.prezime = korisnik.getPrezime();
         this.korisnickoIme = korisnik.getKorisnickoIme();
         this.mejlAdresa = korisnik.getMejlAdresa();

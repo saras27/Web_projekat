@@ -11,7 +11,6 @@ public class RecenzijaDto {
     private double ocena;
     private String tekst;
     private LocalDate datumRecenzije;
-
     private Korisnik korisnik;
     public RecenzijaDto(){
     }
@@ -26,6 +25,7 @@ public class RecenzijaDto {
         this.ocena = recenzija.getOcena();
         this.tekst = recenzija.getTekst();
         this.datumRecenzije = recenzija.getDatumRecenzije();
+        this.korisnik = recenzija.getKorisnik();
     }
     public Long getId() {
         return Id;

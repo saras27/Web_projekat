@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface AutorRepository extends JpaRepository<Autor, Long>{
     Autor getAutorById(Long id);
     Autor getAutorByKorisnickoIme(String ime);
+    Autor getAutorByMejlAdresa(String email);
 }
 

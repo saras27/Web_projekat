@@ -42,12 +42,12 @@ public class RecenzijaRestController {
     }
 
     //ne radi
-    @PostMapping("/api/dodaj-recenziju/{id}")
-    public ResponseEntity<String> dodajRecenziju(@RequestBody RecenzijaDto recenzijaDto, @PathVariable Long id, HttpSession session){
+    @PostMapping("/api/dodaj-recenziju/{idKnjiga}")
+    public ResponseEntity<String> dodajRecenziju(@RequestBody RecenzijaDto recenzijaDto, @PathVariable Long idKnjiga, HttpSession session){
         Recenzija recenzija = new Recenzija();
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
         if(loggedKorisnik != null){
-            return recenzijaService.addRecenzija(recenzijaDto, loggedKorisnik, id);
+            return recenzijaService.addRecenzija(recenzijaDto, loggedKorisnik, idKnjiga);
         }
         return  new ResponseEntity<>("Niste ulogovani", HttpStatus.FORBIDDEN);
     }

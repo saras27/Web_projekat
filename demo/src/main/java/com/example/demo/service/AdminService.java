@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.AktivacijaAutoraDto;
 import com.example.demo.dto.AutorDto;
 import com.example.demo.dto.AzuriranjeProfilaDto;
 import com.example.demo.entity.*;
@@ -25,23 +26,20 @@ public class AdminService {
     public List<ZahtevZaAktivaciju> findAll(){return zahtevZaAktivacijuRepository.findAll();}
 
     public void save(ZahtevZaAktivaciju zahtev){
-        Korisnik korisnik = korisnikRepository.getByMejlAdresa(zahtev.getEmail());
-        if(korisnik.getUloga() == Uloga.AUTOR){
-            zahtevZaAktivacijuRepository.save(zahtev);
-        }
+        zahtevZaAktivacijuRepository.save(zahtev);
         //ako se zahtev ne odnosi na autora, nece se sacuvati
     }
 
-    public ResponseEntity<String> odgovor(boolean odgovor, Long id){
+    public ResponseEntity<String> odgovor(boolean odgovor, ZahtevZaAktivaciju zahtev, Autor autor){
         if(odgovor == false){
+            zahtev.setStatus(Status.ODBIJEN);
+            zahtevZaAktivacijuRepository.save(zahtev);
             return new ResponseEntity<>("Bice Vam poslat mejl, zahtev odbijen", HttpStatus.BAD_REQUEST);
         }
-        ZahtevZaAktivaciju zahtev = zahtevZaAktivacijuRepository.getZahtevZaAktivacijuById(id);
-        Autor noviAutor = new Autor();
-        noviAutor.setAktivan(true);
-        noviAutor.setMejlAdresa(zahtev.getEmail());
-        noviAutor.setUloga(Uloga.AUTOR);
-        autorRepository.save(noviAutor);
+        autor.setAktivan(true);
+        zahtev.setStatus(Status.ODOBREN);
+        autorRepository.save(autor);
+        zahtevZaAktivacijuRepository.save(zahtev);
         return new ResponseEntity<>("Profil autora je aktiviran", HttpStatus.OK);
     }
     public ResponseEntity<String> dodajAutora(AutorDto autorDto){
