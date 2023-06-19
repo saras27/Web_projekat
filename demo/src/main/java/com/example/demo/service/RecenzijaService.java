@@ -74,4 +74,12 @@ public class RecenzijaService {
         recenzija.setOcena(dto.getOcena());
         return recenzija;
     }
+
+    public ResponseEntity<String> azurirajRecenziju(Recenzija azuriranaRecenzija, RecenzijaDto recenzijaDto){
+        azuriranaRecenzija.setOcena(recenzijaDto.getOcena());
+        azuriranaRecenzija.setTekst(recenzijaDto.getTekst());
+        azuriranaRecenzija.setDatumRecenzije(LocalDate.now());
+        recenzijaRepository.save(azuriranaRecenzija);
+        return new ResponseEntity<>("Recenzija uspesno azurirana", HttpStatus.OK);
+    }
 }
