@@ -7,7 +7,7 @@
   </template>
   
   <script>
-  import Korisnik from "c:/Users/HP/Desktop/demo/Web_projekat/frontend/src/components/Korisnik.vue"
+  import Korisnik from "../components/Korisnik.vue"
   export default {
     name: "Prijava",
     components: {Korisnik},
