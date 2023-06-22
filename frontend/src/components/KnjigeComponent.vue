@@ -11,7 +11,7 @@
             <th>Broj strana</th>
             <th>Ocena</th>
         </tr>
-        <tr v-for="k in knjige">
+        <tr v-for="k in knjige" :key="k.id">
             <td><router-link :to="{ name: 'knjiga', params: { id: k.id }}">{{ k.naslov }}</router-link></td>
             <td>{{ k.autor?.ime }} {{ k.autor?.prezime }}</td>
             <td>{{ k.zanr?.naziv }}</td>

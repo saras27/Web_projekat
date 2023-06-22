@@ -2,6 +2,8 @@
   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/knjige">Knjige</router-link>
+    <router-link to="/zanrovi"> Zanrovi</router-link>
+    <router-link to="/korisnici"> Korisnici</router-link>
   </nav>
   <router-view/>
 </template>

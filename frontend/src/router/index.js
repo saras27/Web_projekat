@@ -3,6 +3,8 @@ import HomeView from '../views/HomeView.vue'
 import Prijava from '../views/Prijava.vue'
 import Registracija from '../views/Registracija.vue'
 import PrikaziKnjie from '../views/PrikaziKnjige.vue'
+import ListaKorisnika from '../views/ListaKorisnika.vue'
+import ZanroviPrikaz from '../views/ZanroviPrikaz.vue'
 
 
 const routes = [
@@ -33,6 +35,16 @@ const routes = [
     path: '/knjige',
     name: 'knjige',
     component: PrikaziKnjie
+  },
+  {
+    path: '/zanrovi',
+    name: 'zanrovi',
+    component: ZanroviPrikaz
+  },
+  {
+    path: '/korisnici',
+    name: 'korisnici',
+    component: ListaKorisnika
   },
 ]
 
