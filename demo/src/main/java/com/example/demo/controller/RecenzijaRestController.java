@@ -59,4 +59,22 @@ public class RecenzijaRestController {
         //session.invalidate();
         return recenzijaService.findRecenziju(id);
     }
+
+    @PostMapping("/api/recenzije/{idRecenzije}")
+    public  ResponseEntity<String> azuriranjeRecenzije(@RequestBody RecenzijaDto recenzijaDto,@PathVariable Long idRecenzije,  HttpSession session){
+        Recenzija recenzija = new Recenzija();
+        recenzija = recenzijaService.findRecenziju(idRecenzije);
+        if(recenzija != null) {
+            Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
+            if (loggedKorisnik != null) {
+                if (loggedKorisnik.getId() == recenzija.getKorisnik().getId()) {
+                   return recenzijaService.azurirajRecenziju(recenzija, recenzijaDto);
+                }
+                return new ResponseEntity<>("Mozete azurirati samo sopstvene recenzije", HttpStatus.FORBIDDEN);
+            }
+            return new ResponseEntity<>("Niste ulogovani", HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>("Recenzija koju trazite ne postoji", HttpStatus.FORBIDDEN);
+
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -24,6 +26,7 @@ public class Korisnik implements Serializable {
     private String lozinka;
     @Column(name = "datum_rodjenja")
     private LocalDate datumRodjenja;
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "korisnik_id")
     private Set<Polica> police = new HashSet<>();
