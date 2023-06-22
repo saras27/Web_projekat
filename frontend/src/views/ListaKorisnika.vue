@@ -10,7 +10,7 @@
                     <th>Korisnicko ime</th>
                     <th>Mejl adresa</th>
                 </tr>
-                
+
                 <ZanrComp v-for = "korisnik in korisnici"
                     :key = "korisnik.korisnikId"
                     :korisnikId = "korisnik.korisnikId"
