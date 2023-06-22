@@ -44,7 +44,7 @@
   
   <script>
   //import axios from "axios";
-  import Knjiga from "../components/Knjiga.vue";
+  import Knjiga from "../components/KnjigaPage.vue";
   export default {
     name: "PrikaziKnjige",
     components: { Knjiga },
