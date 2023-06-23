@@ -1,10 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import Prijava from '../views/Prijava.vue'
-import Registracija from '../views/Registracija.vue'
-import PrikaziKnjie from '../views/PrikaziKnjige.vue'
-import ListaKorisnika from '../views/ListaKorisnika.vue'
-import ZanroviPrikaz from '../views/ZanroviPrikaz.vue'
 
 
 const routes = [
@@ -49,4 +44,6 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+
 export default router

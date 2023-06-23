@@ -7,16 +7,23 @@
     </div>
     <div v-else>
       <h1>Police korisnika {{ korisnik.korisnickoIme }} </h1><br>
-      <button>Dodaj novu policu</button>
+    
+       <div v-if="prikaziF">  
+        <form>
+          <input type="text">
+          <button @click="dodaj">Dodaj</button> 
+        </form>
+      </div> 
+      <div v-else>  
+        <button @click="prikazi(prikaziFormu)">Dodaj novu policu</button>
+       </div> 
       <div v-for="p in police" :key="p.id">
         <h3>{{ p.naziv }}</h3>
-        <div v-if="knjige.length > 0">
+        <div v-if="knjige?.length > 0">
           <KnjigeComponent :knjige="p.stavke?.map(s => s.knjiga)" :sveKnjige="sveKnjige" :korisnik="korisnik"></KnjigeComponent>
+      
         </div>
         <div v-else>Na polici nema knjiga.</div>
-        <div class="btn-row" v-if="korisnik && sveKnjige && sveKnjige.length">
-        <span colspan="5"><button class="dodaj-knjigu">+ Dodaj knjigu</button></span>
-    </div>
       </div>
     </div>
   </div>
@@ -28,10 +35,13 @@ export default {
   name: 'Home',
   data: function() {
         return {
-            korisnik: {},
-            police: [],
-            knjige: [],
-            sveKnjige: []
+          korisnik: {},
+          police: [],
+          knjige: [],
+          sveKnjige: [],
+          prikaziFormu:{
+            prikaziF: false
+          }
         }
     },
   components: {
@@ -70,7 +80,7 @@ export default {
           console.log('br sveKnjige: ' + this.sveKnjige.length);
           if(this.sveKnjige.length > 0){
               console.log('prva ' + JSON.stringify(this.sveKnjige[0]));
-              for (let i = 0; i < this.knjige.length; i++){
+              for (let i = 0; i < this.sveKnjige.length; i++){
                   console.log('naslov ' + i.naslov);
               }
           } 
@@ -79,6 +89,17 @@ export default {
           console.error("Error:", error);
       });
     }
+  },
+  methods: {
+   prikazi(prikaziFormu){
+      prikaziFormu = true;
+    },
+    // dodaj(policaId, knjigaId) {
+
+    //   //
+    //   this.privaziFormu = false;
+    //   window.location.reload();
+    // }
   }
 }
 </script>
