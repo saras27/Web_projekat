@@ -9,7 +9,7 @@
       <h1>Police korisnika {{ korisnik.korisnickoIme }} </h1><br>
       <div v-for="p in police" :key="p.id">
         <h3>{{ p.naziv }}</h3>
-        <KnjigeComponent :knjige="p.stavke?.map(s => s.knjiga)" :sveKnjige="sveKnjige" :korisnik="korisnik"></KnjigeComponent>
+        <KnjigeComponent :knjige="p.stavke?.map(s => s.knjiga)" :sveKnjige="sveKnjige" :korisnik="korisnik" :policaId="p.id"></KnjigeComponent>
       </div>
     </div>
   </div>

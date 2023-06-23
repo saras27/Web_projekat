@@ -34,6 +34,7 @@ const routes = [
     name: 'ZanroviView',
     component: () => import(/* webpackChunkName: "ZanrComp" */ '../components/ZanrComponent.vue')
   }, 
+
 ]
 
 const router = createRouter({

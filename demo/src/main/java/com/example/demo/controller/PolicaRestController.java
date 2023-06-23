@@ -4,6 +4,7 @@ import com.example.demo.dto.*;
 import com.example.demo.entity.*;
 import com.example.demo.repository.PolicaRepository;
 import com.example.demo.repository.RecenzijaRepository;
+import com.example.demo.repository.StavkaPoliceRepository;
 import com.example.demo.service.KnjigaService;
 import com.example.demo.service.RecenzijaService;
 import com.example.demo.service.PolicaService;
@@ -38,6 +39,8 @@ public class PolicaRestController {
     private RecenzijaService recenzijaService;
     @Autowired
     private PolicaRepository policaRepository;
+    @Autowired
+    private StavkaPoliceRepository stavkaRepository;
 
     @Autowired
     private SessionService sessionService;
@@ -119,23 +122,47 @@ public class PolicaRestController {
 
     @PostMapping("/api/polica/{idPolice}/{idKnjige}")
     public ResponseEntity<String>obrisiKnjiguSaPolice(@PathVariable Long idPolice, @PathVariable Long idKnjige, HttpSession session, HttpServletRequest req){
-        if(checkLogin(req)) {
-            Polica police = policaService.getById(idPolice);
-            if(police == null){
-                return  new ResponseEntity("Ne postoji polica", HttpStatus.BAD_REQUEST);
-            }
-            if(police.getStavke() != null){
-                StavkaPolice stavka = police.getStavke().stream().filter(s->s.getKnjiga().getId() == idKnjige).findFirst().orElse(null);
-                if(stavka != null){
-                    police.getStavke().remove(stavka);
-                    policaRepository.save(police);
-                    return  new ResponseEntity("Uspesno obrisana", HttpStatus.OK);
-                }
-            }
-            return  new ResponseEntity("Nema knjige na polici", HttpStatus.BAD_REQUEST);
-
+        session = sessionService.getSession();
+        if(session == null) {
+            return  new ResponseEntity("Nema sesije", HttpStatus.BAD_REQUEST);
         }
-        return  new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if(korisnik == null) {
+            return  new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
+        }
+        Set<Polica> korisnikPolice = korisnik.getPolice();
+        if(korisnikPolice == null) {
+            return  new ResponseEntity("Nema polica", HttpStatus.BAD_REQUEST);
+        }
+        Polica police = korisnikPolice.stream().filter(p -> p.getId() == idPolice).findFirst().orElse(null);
+        if(police != null && police.getStavke() != null){
+            StavkaPolice stavka = police.getStavke().stream().filter(s->s.getKnjiga().getId() == idKnjige).findFirst().orElse(null);
+            if(stavka != null){
+                police.getStavke().remove(stavka);
+                policaRepository.save(police);
+                stavkaRepository.delete(stavka);
+               // policaRepository.save(police);
+                return  new ResponseEntity("Uspesno obrisana", HttpStatus.OK);
+            }
+        }
+        return  new ResponseEntity("Nema knjige na polici", HttpStatus.BAD_REQUEST);
+//        if(checkLogin(req)) {
+//            Polica police = policaService.getById(idPolice);
+//            if(police == null){
+//                return  new ResponseEntity("Ne postoji polica", HttpStatus.BAD_REQUEST);
+//            }
+//            if(police.getStavke() != null){
+//                StavkaPolice stavka = police.getStavke().stream().filter(s->s.getKnjiga().getId() == idKnjige).findFirst().orElse(null);
+//                if(stavka != null){
+//                    police.getStavke().remove(stavka);
+//                    policaRepository.save(police);
+//                    return  new ResponseEntity("Uspesno obrisana", HttpStatus.OK);
+//                }
+//            }
+//            return  new ResponseEntity("Nema knjige na polici", HttpStatus.BAD_REQUEST);
+//
+//        }
+//        return  new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
     }
 
     //@PostMapping
