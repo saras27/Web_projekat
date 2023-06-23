@@ -6,10 +6,12 @@ import com.example.demo.repository.PolicaRepository;
 import com.example.demo.service.KnjigaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PolicaService;
+import com.example.demo.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,14 +33,17 @@ public class KorisnikRestController {
     @Autowired
     private PolicaRepository policaRepository;
 
+    @Autowired
+    private SessionService sessionService;
+
     @GetMapping("/api/")
     public String welcome(){
         return "Hello from api!";
     }
 
     //radi
-    @PostMapping("api/login")
-    public Set<Polica> login(@RequestBody LoginDto loginDto, HttpSession session){
+    @PostMapping(value = "api/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Korisnik> login(@RequestBody LoginDto loginDto, HttpSession session){
         // proverimo da li su podaci validni
         if(loginDto.getKorisnickoIme().isEmpty() || loginDto.getLozinka().isEmpty()) {
             System.out.println("Invalid login data");
@@ -51,10 +56,11 @@ public class KorisnikRestController {
             return null;
         }
         session.setAttribute("korisnik", loggedKorisnik);
+        sessionService.setSession(session);
         System.out.println(loggedKorisnik.getUloga());
         Uloga uloga = (Uloga) session.getAttribute("uloga");
         //System.out.println(session.getAttribute(uloga.toString()));
-        return loggedKorisnik.getPolice();
+        return new ResponseEntity<>(loggedKorisnik, HttpStatus.OK);
     }
 
     //radi
@@ -103,25 +109,21 @@ public class KorisnikRestController {
     }
 
     //radi
-    @PostMapping("api/registracija")
-    public ResponseEntity<String> registracija(@RequestBody RegistracijaDto registracijaDto, HttpSession session) {
+    @PostMapping(value = "api/registracija", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> registracija(@RequestBody RegistracijaDto registracijaDto, HttpSession session) {
         if(registracijaDto.getKorisnickoIme().isEmpty() || registracijaDto.getIme().isEmpty() ||
                 registracijaDto.getPrezime().isEmpty() || registracijaDto.getMejl().isEmpty() ||
-                registracijaDto.getLozinka().isEmpty() || registracijaDto.getPotvrda_lozinke().isEmpty())
-            return new ResponseEntity("Neispravni podaci za registraciju", HttpStatus.BAD_REQUEST);
-
+                registracijaDto.getLozinka().isEmpty() || registracijaDto.getPotvrda_lozinke().isEmpty()){
+            System.out.println("Invalid login data");
+            return null;
+        }
         if(registracijaDto.getLozinka().equals(registracijaDto.getPotvrda_lozinke()))
         {
             Korisnik registrovanKorisnik = korisnikService.registruj(registracijaDto.getIme(),
                     registracijaDto.getPrezime(), registracijaDto.getKorisnickoIme(), registracijaDto.getMejl(),
                     registracijaDto.getLozinka());
-            if(registrovanKorisnik == null)
-                return new ResponseEntity("Vec postoji korisnik sa unetim korisnickim imenom", HttpStatus.BAD_REQUEST);
-            else{
-                this.korisnikService.registruj(registrovanKorisnik.getIme(), registrovanKorisnik.getPrezime(), registrovanKorisnik.getKorisnickoIme(), registrovanKorisnik.getMejlAdresa(), registrovanKorisnik.getLozinka());
-                session.setAttribute("korisnik", registrovanKorisnik);
-                return ResponseEntity.ok("Uspesno registrovan!");
-            }
+            session.setAttribute("korisnik", registrovanKorisnik);
+            return new ResponseEntity(registrovanKorisnik, HttpStatus.OK);
         }
         else{
             return new ResponseEntity("Podaci se ne poklapaju", HttpStatus.BAD_REQUEST);
@@ -150,7 +152,7 @@ public class KorisnikRestController {
     //radi
     @PostMapping("/api/dodajPolicu-prijavljenikorisnik")
     public ResponseEntity<String> dodajPolicu(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request) {
-         HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         if (checkLogin(session)) {
             Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
             return policaService.save(novaPolicaDto.getNaziv(), prijavljeniKorisnik);

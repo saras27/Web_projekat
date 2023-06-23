@@ -68,7 +68,7 @@ public class RecenzijaRestController {
             Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
             if (loggedKorisnik != null) {
                 if (loggedKorisnik.getId() == recenzija.getKorisnik().getId()) {
-                   return recenzijaService.azurirajRecenziju(recenzija, recenzijaDto);
+                    return recenzijaService.azurirajRecenziju(recenzija, recenzijaDto);
                 }
                 return new ResponseEntity<>("Mozete azurirati samo sopstvene recenzije", HttpStatus.FORBIDDEN);
             }

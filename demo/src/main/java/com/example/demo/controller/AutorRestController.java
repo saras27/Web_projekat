@@ -168,12 +168,12 @@ public class AutorRestController {
     @PostMapping("/api/azurirajKnjige/{id}")
     public ResponseEntity<String> azuriranjeKnjige(@PathVariable Long id, @RequestBody AzuriranjeKnjigeDto azuriranjeKnjigeDto, HttpSession session){
         if (checkLoginAutor(session)) {
-           Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
             if (korisnik.getUloga() == Uloga.AUTOR) {
                 //moram da proverim da li je knjiga tog autora koji zeli da azurira
                 Knjiga knjiga = knjigaRepository.getById(id);
                 if(knjiga.getAutor().getId().equals(korisnik.getId()))
-                knjigaService.azuriranjeKnjige(id, azuriranjeKnjigeDto);
+                    knjigaService.azuriranjeKnjige(id, azuriranjeKnjigeDto);
                 return new ResponseEntity<>("Azurirana", HttpStatus.OK);
             }
             return new ResponseEntity<>("Samo autori imaju pristup", HttpStatus.BAD_REQUEST);
