@@ -27,6 +27,9 @@ public interface PolicaRepository extends JpaRepository<Polica, Long>{
      nativeQuery = true)
      Set<Polica> getAllByNaziv(String naziv);*/
 
+     @Query("SELECT p FROM Polica p WHERE p.korisnik.id = ?1")
+     List<Polica> getByKorisnik(Long korisnikId);
+
 
 
 

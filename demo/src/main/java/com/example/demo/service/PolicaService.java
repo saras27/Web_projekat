@@ -46,6 +46,10 @@ public class PolicaService {
         }
     }
 
+    public List<Polica> getKorisnikovePolice(Long korisnikId) {
+        return policaRepository.getByKorisnik(korisnikId);
+    }
+
 
     public List<Polica> findAll(){return policaRepository.findAll();}
     //public List<Polica> findAllPoImenu(String ime){return policaRepository.find;}

@@ -30,10 +30,10 @@ public class DemoApplication implements CommandLineRunner {
 	public void run(String... args) {
 
 		// kreiramo novi objekat klase Employee
-		Recenzija recenzija = new Recenzija();
-		recenzija.setOcena(5);
-		recenzija.setTekst("lepo!");
-		recenzija.setDatumRecenzije(LocalDate.ofEpochDay(2016-02-26));
+//		Recenzija recenzija = new Recenzija();
+//		recenzija.setOcena(5);
+//		recenzija.setTekst("lepo!");
+//		recenzija.setDatumRecenzije(LocalDate.ofEpochDay(2016-02-26));
 		/*stavka.setNaslovnaFotografija(" ");
 		knjiga.setISBN("2643581");
 		knjiga.setDatumObjavljivanja("26.5.2001.");
@@ -45,7 +45,7 @@ public class DemoApplication implements CommandLineRunner {
 
 
 		// čuvamo objekat u bazi
-		this.recenzijaRepository.save(recenzija);
+//		this.recenzijaRepository.save(recenzija);
 
 		List<Recenzija> recenzije = this.recenzijaRepository.findAll();
 //		List<Employee> employees = this.employeeRepository.findAllByPositionOrderByFirstName("radnik");
