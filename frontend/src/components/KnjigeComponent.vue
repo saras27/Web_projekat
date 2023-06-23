@@ -7,6 +7,7 @@
                 <th>Žanr</th>
                 <th>Broj strana</th>
                 <th>Ocena</th>
+                <th v-if="korisnik || korisnik !== null"></th>
             </tr>
             <tr v-for="k in knjige" :key="k.id">
                 <td><router-link :to="{ name: 'knjiga', params: { id: k.id }}">{{ k.naslov }}</router-link></td>
@@ -14,6 +15,9 @@
                 <td>{{ k.zanr?.naziv }}</td>
                 <td>{{ k.brojStrana }}</td>
                 <td>{{ k.ocena }}</td>
+                <td v-if="korisnik || korisnik !== null">
+                    <button @click="brisanje">Ukloni</button>
+                </td>
             </tr>
         </table>
     </div>
