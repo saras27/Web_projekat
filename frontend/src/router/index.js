@@ -1,12 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import Prijava from '../views/Prijava.vue'
-import Registracija from '../views/Registracija.vue'
-import PrikaziKnjie from '../views/PrikaziKnjige.vue'
-//import ZanroviPrikaz from '../views/ZanroviPrikaz.vue'
-//import ListaKorisnika from '../views/ListaKorisnika.vue'
-
-
 const routes = [
   {
     path: '/',
@@ -22,35 +15,24 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
-    path: '/login',
-    name: 'prijava',
-    component: Prijava
-  },
-  {
-    path: '/registracija',
-    name: 'registracija',
-    component: Registracija
-  },
-  {
     path: '/knjige',
     name: 'knjige',
-    component: PrikaziKnjie
-  },
- /* {
-    path: '/zanrovi',
-    name: 'zanrovi',
-    component: ZanroviPrikaz
+    component: () => import(/* webpackChunkName: "knjige" */ '../views/KnjigeView.vue')
   },
   {
-    path: '/korisnici',
-    name: 'korisnici',
-    component: ListaKorisnika
-  },*/
+    path: '/knjiga/:id',
+    name: 'knjiga',
+    component: () => import(/* webpackChunkName: "knjiga" */ '../views/KnjigeView.vue')
+  },
+  {
+    path: '/zanrovi',
+    name: 'zanrovi',
+    component: () => import(/* webpackChunkName: "zanrovi" */ '../views/ZanroviView.vue')
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
-
 export default router
