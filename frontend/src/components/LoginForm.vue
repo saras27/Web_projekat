@@ -10,7 +10,6 @@
     <span>Nemas nalog? </span><router-link to="/registracija" class="redirect-link">Registruj se</router-link>
   </template>
   <script>
-  import { loginState } from '@/router/listener'
     export default {
       name: 'LoginForm',
       data: function(){
@@ -38,7 +37,6 @@
               }).then(data => {
                   window.sessionStorage.setItem('korisnik', JSON.stringify(data));
                   this.$router.push({ name: 'home' });
-                  loginState.ulogovan = true;
                   window.location.reload();
               })
               .catch((error) => {

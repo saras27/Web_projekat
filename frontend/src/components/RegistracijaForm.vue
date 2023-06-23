@@ -54,7 +54,6 @@
             }).then(data => {
                 window.sessionStorage.setItem('korisnik', JSON.stringify(data));
                 this.$router.push({ name: 'home' });
-                loginState.ulogovan = true;
                 window.location.reload();
             })
             .catch((error) => {

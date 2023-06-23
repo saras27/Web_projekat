@@ -20,9 +20,6 @@
     <div v-else>
         <p>Nema knjiga za prikaz</p>
     </div>
-    <div class="btn-row" v-if="korisnik && sveKnjige && sveKnjige.length">
-        <span colspan="5"><button class="dodaj-knjigu">+ Dodaj knjigu</button></span>
-    </div>
   </template>
   
   <script>

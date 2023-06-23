@@ -7,9 +7,16 @@
     </div>
     <div v-else>
       <h1>Police korisnika {{ korisnik.korisnickoIme }} </h1><br>
+      <button>Dodaj novu policu</button>
       <div v-for="p in police" :key="p.id">
         <h3>{{ p.naziv }}</h3>
-        <KnjigeComponent :knjige="p.stavke?.map(s => s.knjiga)" :sveKnjige="sveKnjige" :korisnik="korisnik"></KnjigeComponent>
+        <div v-if="knjige.length > 0">
+          <KnjigeComponent :knjige="p.stavke?.map(s => s.knjiga)" :sveKnjige="sveKnjige" :korisnik="korisnik"></KnjigeComponent>
+        </div>
+        <div v-else>Na polici nema knjiga.</div>
+        <div class="btn-row" v-if="korisnik && sveKnjige && sveKnjige.length">
+        <span colspan="5"><button class="dodaj-knjigu">+ Dodaj knjigu</button></span>
+    </div>
       </div>
     </div>
   </div>
