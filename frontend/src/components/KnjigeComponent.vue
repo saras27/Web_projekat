@@ -36,8 +36,12 @@
     methods: {
         async brisanje(pId, kId){
             if(pId && kId) {
-                await fetch(`http://localhost:8081/api/polica/${pId}/${kId}`)
+                await fetch(`http://localhost:8081/api/polica/${pId}/${kId}`,{
+                    method: 'DELETE'
+                })
+                
             .then(response => {
+                console.log("GRESKAA");
                 window.location.reload();
             });
             }

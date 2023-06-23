@@ -120,7 +120,7 @@ public class PolicaRestController {
         }
     }
 
-    @PostMapping("/api/polica/{idPolice}/{idKnjige}")
+    @DeleteMapping("/api/polica/{idPolice}/{idKnjige}")
     public ResponseEntity<String>obrisiKnjiguSaPolice(@PathVariable Long idPolice, @PathVariable Long idKnjige, HttpSession session, HttpServletRequest req){
         session = sessionService.getSession();
         if(session == null) {
