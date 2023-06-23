@@ -23,7 +23,7 @@ export default {
       }
   },
   mounted: async function() {
-      await fetch('http://localhost:9090/api/knjige')
+      await fetch('http://localhost:8081/api/knjige')
           .then(response => {
               return response.json();
           }).then(data => {

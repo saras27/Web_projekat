@@ -19,7 +19,7 @@
         }
     },
     mounted: async function() {
-        await fetch('http://localhost:9090/api/zanrovi')
+        await fetch('http://localhost:8081/api/zanrovi')
             .then(response => {
                 return response.json();
             }).then(data => {
@@ -36,7 +36,7 @@
             .catch((error) => {
                 console.error("Error:", error);
             });
-            await fetch('http://localhost:9090/api/knjige-zanr' + this.$route.params.id)
+            await fetch('http://localhost:8081/api/knjige-zanr' + this.$route.params.id)
             .then(response => {
                 return response.json();
             }).then(data => {

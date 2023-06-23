@@ -35,7 +35,7 @@ export default {
     this.korisnik = JSON.parse(window.sessionStorage.getItem('korisnik'));
     if (this.korisnik && this.korisnik !== null) {
       // get police korisnika
-      await fetch('http://localhost:9090/api/police')
+      await fetch('http://localhost:8081/api/police')
             .then(response => {
                 return response.json();
               }).then(data => {
@@ -54,7 +54,7 @@ export default {
             });
 
       // get sve knjige za dodavanje na policu
-      await fetch('http://localhost:9090/api/knjige')
+      await fetch('http://localhost:8081/api/knjige')
       .then(response => {
           return response.json();
       }).then(data => {

@@ -36,7 +36,7 @@ export default {
         KorisnikComp,
     },
     mounted(){
-        fetch('http://localhost:9090/api/korisnici')
+        fetch('http://localhost:8081/api/korisnici')
             .then(response => response.json())
             .then(data => {
                 console.log("Success:", data);

@@ -31,7 +31,7 @@
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ korisnickoIme: this.input.username, lozinka: this.input.password })
           };
-          fetch('http://localhost:9090/api/login', requestOptions)
+          fetch('http://localhost:8081/api/login', requestOptions)
               .then(response => {
                   window.sessionStorage.setItem('korisnik', response.body);
                   return response.json();
