@@ -12,6 +12,6 @@
 
     export default {
         name: "KorisnikComp",
-        props: ["korisnikId", "ime", "prezime", "korisnickoIme", "mejlAdresa"],   
+        props: ["korisnikId", "ime", "prezime", "korisnickoIme", "mejlAdresa"],
     };
 </script>

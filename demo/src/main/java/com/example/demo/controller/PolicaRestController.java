@@ -7,6 +7,7 @@ import com.example.demo.repository.RecenzijaRepository;
 import com.example.demo.service.KnjigaService;
 import com.example.demo.service.RecenzijaService;
 import com.example.demo.service.PolicaService;
+import com.example.demo.service.SessionService;
 import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -38,6 +39,9 @@ public class PolicaRestController {
     @Autowired
     private PolicaRepository policaRepository;
 
+    @Autowired
+    private SessionService sessionService;
+
     //drugi put kad se napravi polica sa istim imenom ne radi, prvi put radi
     @PostMapping("/api/dodajPolicu")
     public ResponseEntity<String> novaPolica(@RequestBody NovaPolicaDto novaPolicaDto, HttpServletRequest request,HttpSession session){
@@ -56,16 +60,17 @@ public class PolicaRestController {
 
     //radi
     @GetMapping("/api/police")
-    public ResponseEntity<List<PolicaDto>> getPolice(HttpSession session){
-        List<Polica> police = policaService.findAll();
-
-        Polica polica1 = (Polica) session.getAttribute("polica");
-        if(polica1 == null) {
+    public ResponseEntity<List<PolicaDto>> getPolice(){
+        HttpSession session = sessionService.getSession();
+        //sessionService.setSession(session);
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if(korisnik == null) {
             System.out.println("Nema sesije");
         } else {
-            System.out.println(polica1);
+            System.out.println(korisnik);
         }
 
+        List<Polica> police = policaService.getKorisnikovePolice(korisnik.getId());
         List<PolicaDto> dtos = new ArrayList<>();
         for(Polica polica : police){
             PolicaDto dto = new PolicaDto(polica);
@@ -90,24 +95,24 @@ public class PolicaRestController {
     @PostMapping("/api/dodaj-knjigu/{idPolice}")
     public ResponseEntity<String> dodajKnjigu(@RequestBody DodajKnjiguRequestDto requestDto, @PathVariable Long idPolice, HttpServletRequest req, HttpSession session){
         if(checkLogin(req)) {
-                if (knjigaService.findKnjigu(requestDto.knjigaDto.getNaslov()) != null && requestDto.knjigaDto.getNaslov() != "") {
-                    Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-                    Polica polica = policaService.getById(idPolice);
-                    if(polica == null || polica.getKorisnik().getId() != korisnik.getId()) {
-                        return new ResponseEntity<>("Polica na koju zelite da dodate knjigu ne postoji", HttpStatus.NOT_FOUND);
+            if (knjigaService.findKnjigu(requestDto.knjigaDto.getNaslov()) != null && requestDto.knjigaDto.getNaslov() != "") {
+                Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+                Polica polica = policaService.getById(idPolice);
+                if(polica == null || polica.getKorisnik().getId() != korisnik.getId()) {
+                    return new ResponseEntity<>("Polica na koju zelite da dodate knjigu ne postoji", HttpStatus.NOT_FOUND);
+                }else{
+                    Knjiga knjiga = knjigaService.findKnjigu(requestDto.knjigaDto.getNaslov());
+                    Recenzija recenzija;
+                    if(requestDto.recenzijaDto == null){
+                        recenzija = null;
                     }else{
-                        Knjiga knjiga = knjigaService.findKnjigu(requestDto.knjigaDto.getNaslov());
-                        Recenzija recenzija;
-                        if(requestDto.recenzijaDto == null){
-                            recenzija = null;
-                        }else{
-                            recenzija = recenzijaService.createModelFromDto(requestDto.recenzijaDto);
-                        }
-                        return policaService.dodavanjeNaPolicu(knjiga, polica, korisnik.getId(), recenzija);
+                        recenzija = recenzijaService.createModelFromDto(requestDto.recenzijaDto);
                     }
-                } else {
-                    return new ResponseEntity<>("Knjiga sa ovim naslovom ne postoji u bazi ili ste uneli prazan string", HttpStatus.NOT_FOUND);
+                    return policaService.dodavanjeNaPolicu(knjiga, polica, korisnik.getId(), recenzija);
                 }
+            } else {
+                return new ResponseEntity<>("Knjiga sa ovim naslovom ne postoji u bazi ili ste uneli prazan string", HttpStatus.NOT_FOUND);
+            }
         }else{
             return  new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
         }

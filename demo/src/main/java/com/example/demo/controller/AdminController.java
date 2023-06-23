@@ -42,7 +42,7 @@ public class AdminController {
             return new ResponseEntity("Niste ulogovani", HttpStatus.BAD_REQUEST);
         }
 
-            if(korisnik.getUloga() == Uloga.ADMINISTRATOR){
+        if(korisnik.getUloga() == Uloga.ADMINISTRATOR){
             List<ZahtevZaAktivaciju> sviZahtevi = adminService.findAll();
             List<AktivacijaAutoraDto> naCekanju = new ArrayList<>();
             for (ZahtevZaAktivaciju z : sviZahtevi) {
@@ -52,7 +52,7 @@ public class AdminController {
                 }
             }
             return ResponseEntity.ok(naCekanju);
-            }
+        }
         System.out.println("Samo administratori imaju pristup zahtevima");
         return new ResponseEntity("Niste admin", HttpStatus.BAD_REQUEST);
     }
@@ -104,9 +104,9 @@ public class AdminController {
         Korisnik loggedKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (loggedKorisnik.getUloga() == Uloga.ADMINISTRATOR) {
 
-             return zanrService.dodavanjeZanra(zanrDto);
+            return zanrService.dodavanjeZanra(zanrDto);
 
-            }else
+        }else
             return new ResponseEntity<>("Samo administratori imaju pristup", HttpStatus.BAD_REQUEST);
     }
     @PostMapping("/api/dodajKnjigu-admin")
@@ -145,7 +145,7 @@ public class AdminController {
     @PostMapping("/api/brisanjeKnjige-admin/{id}")
     public ResponseEntity<String> brisanjeKnjiga(@PathVariable Long id, HttpSession session) {
         if (checkLogin(session)) {
-           Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
             if (korisnik.getUloga() == Uloga.ADMINISTRATOR) {
                 knjigaService.brisanjeKnjigeAdmin(id);
                 return new ResponseEntity<>("Azurirana", HttpStatus.OK);

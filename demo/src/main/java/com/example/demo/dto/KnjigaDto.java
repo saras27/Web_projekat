@@ -21,7 +21,7 @@ public class KnjigaDto {
     public KnjigaDto(){
     }
     public KnjigaDto(Long Id, String naslov, String naslovnaFotografija, String ISBN, LocalDate
-                     datumObjavljivanja, int brStr, String opis, Zanr zanr, Autor autor, double ocena){
+            datumObjavljivanja, int brStr, String opis, Zanr zanr, Autor autor, double ocena){
         this.Id = Id;
         this.naslov = naslov;
         this.naslovnaFotografija = naslovnaFotografija;

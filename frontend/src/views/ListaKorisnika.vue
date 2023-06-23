@@ -36,7 +36,11 @@ export default {
         KorisnikComp,
     },
     mounted(){
+<<<<<<< HEAD
         fetch('http://localhost:9090/api/korisnici')
+=======
+        fetch('http://localhost:8081/api/korisnici')
+>>>>>>> 81556e65bcb24d565c4eee999602c79150040455
             .then(response => response.json())
             .then(data => {
                 console.log("Success:", data);

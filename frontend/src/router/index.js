@@ -22,35 +22,31 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
-    path: '/login',
-    name: 'prijava',
-    component: Prijava
-  },
-  {
-    path: '/registracija',
-    name: 'registracija',
-    component: Registracija
-  },
-  {
     path: '/knjige',
     name: 'knjige',
-    component: PrikaziKnjie
+    component: () => import(/* webpackChunkName: "knjige" */ '../views/KnjigeView.vue')
+  },
+  {
+    path: '/knjiga/:id',
+    name: 'knjiga',
+    component: () => import(/* webpackChunkName: "knjiga" */ '../views/KnjigeView.vue')
   },
   {
     path: '/zanrovi',
     name: 'zanrovi',
-    component: ZanroviPrikaz
+    component: () => import(/* webpackChunkName: "zanrovi" */ '../views/ZanroviView.vue')
   },
   {
-    path: '/korisnici',
-    name: 'korisnici',
-    component: ListaKorisnika
+    path: '/registracija',
+    name: 'registracija',
+    component: () => import(/* webpackChunkName: "registracija" */ '../views/RegistracijaView.vue')
   },
+
+
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
-
 export default router

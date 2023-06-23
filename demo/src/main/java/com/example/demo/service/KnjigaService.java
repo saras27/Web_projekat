@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Autor;
-import com.example.demo.entity.Knjiga;
-import com.example.demo.entity.Korisnik;
-import com.example.demo.entity.StavkaPolice;
+import com.example.demo.entity.*;
 import com.example.demo.repository.AutorRepository;
 import com.example.demo.repository.KnjigaRepository;
 import com.example.demo.repository.RecenzijaRepository;
@@ -13,8 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.example.demo.dto.*;
 
 @Service
@@ -39,6 +40,15 @@ public class KnjigaService {
 
         return null;
     }
+
+    public Knjiga findById(Long id){
+        Optional<Knjiga> foundKnjiga = Optional.ofNullable(knjigaRepository.getById(id));
+        if (foundKnjiga.isPresent())
+            return foundKnjiga.get();
+
+        return null;
+    }
+
     public void remove(Knjiga knjiga){knjigaRepository.delete(knjiga);}
 
     public List<Knjiga> findAll(){
@@ -94,5 +104,22 @@ public class KnjigaService {
         return new ResponseEntity<>("Knjiga je obrisana", HttpStatus.OK);
 
     }
-    
+
+    public List<Knjiga> getByZanr(Long zanrId) {
+        return knjigaRepository.getKnjigePoZanru(zanrId);
+    }
+
+    public List<Recenzija> getRecenzijeKnjige(Long knjigaId) {
+        List<StavkaPolice> stavke = stavkaPoliceRepository.getStavkeZaKnjige(knjigaId);
+        List<Recenzija> sveRecenzije = recenzijaRepository.findAll();
+        List<Recenzija> recenzijeKnjige = new ArrayList<>();
+        for (StavkaPolice stavka : stavke) {
+            Recenzija rec = sveRecenzije.stream().filter(r -> r.getStavka().getId() == stavka.getId()).findFirst().orElse(null);
+            if(rec != null) {
+                recenzijeKnjige.add(rec);
+            }
+        }
+        return recenzijeKnjige;
+    }
+
 }
