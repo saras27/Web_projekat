@@ -109,25 +109,21 @@ public class KorisnikRestController {
     }
 
     //radi
-    @PostMapping("api/registracija")
-    public ResponseEntity<String> registracija(@RequestBody RegistracijaDto registracijaDto, HttpSession session) {
+    @PostMapping(value = "api/registracija", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> registracija(@RequestBody RegistracijaDto registracijaDto, HttpSession session) {
         if(registracijaDto.getKorisnickoIme().isEmpty() || registracijaDto.getIme().isEmpty() ||
                 registracijaDto.getPrezime().isEmpty() || registracijaDto.getMejl().isEmpty() ||
-                registracijaDto.getLozinka().isEmpty() || registracijaDto.getPotvrda_lozinke().isEmpty())
-            return new ResponseEntity("Neispravni podaci za registraciju", HttpStatus.BAD_REQUEST);
-
+                registracijaDto.getLozinka().isEmpty() || registracijaDto.getPotvrda_lozinke().isEmpty()){
+            System.out.println("Invalid login data");
+            return null;
+        }
         if(registracijaDto.getLozinka().equals(registracijaDto.getPotvrda_lozinke()))
         {
             Korisnik registrovanKorisnik = korisnikService.registruj(registracijaDto.getIme(),
                     registracijaDto.getPrezime(), registracijaDto.getKorisnickoIme(), registracijaDto.getMejl(),
                     registracijaDto.getLozinka());
-            if(registrovanKorisnik == null)
-                return new ResponseEntity("Vec postoji korisnik sa unetim korisnickim imenom", HttpStatus.BAD_REQUEST);
-            else{
-                this.korisnikService.registruj(registrovanKorisnik.getIme(), registrovanKorisnik.getPrezime(), registrovanKorisnik.getKorisnickoIme(), registrovanKorisnik.getMejlAdresa(), registrovanKorisnik.getLozinka());
-                session.setAttribute("korisnik", registrovanKorisnik);
-                return ResponseEntity.ok("Uspesno registrovan!");
-            }
+            session.setAttribute("korisnik", registrovanKorisnik);
+            return new ResponseEntity(registrovanKorisnik, HttpStatus.OK);
         }
         else{
             return new ResponseEntity("Podaci se ne poklapaju", HttpStatus.BAD_REQUEST);
