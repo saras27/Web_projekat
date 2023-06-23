@@ -123,6 +123,7 @@ public class KorisnikRestController {
                     registracijaDto.getPrezime(), registracijaDto.getKorisnickoIme(), registracijaDto.getMejl(),
                     registracijaDto.getLozinka());
             session.setAttribute("korisnik", registrovanKorisnik);
+            sessionService.setSession(session);
             return new ResponseEntity(registrovanKorisnik, HttpStatus.OK);
         }
         else{

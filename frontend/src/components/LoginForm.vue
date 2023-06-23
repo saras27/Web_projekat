@@ -7,7 +7,7 @@
     <br><br>
     <button @click="ulogujSe">Uloguj se</button>
     <br><br>
-    <span>Nemas nalog? </span><router-link to="/about" class="redirect-link">Registruj se</router-link>
+    <span>Nemas nalog? </span><router-link to="/registracija" class="redirect-link">Registruj se</router-link>
   </template>
   <script>
   import { loginState } from '@/router/listener'

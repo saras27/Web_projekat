@@ -29,6 +29,11 @@ const routes = [
     name: 'zanrovi',
     component: () => import(/* webpackChunkName: "zanrovi" */ '../views/ZanroviView.vue')
   },
+  {
+    path: '/registracija',
+    name: 'registracija',
+    component: () => import(/* webpackChunkName: "registracija" */ '../views/RegistracijaView.vue')
+  },
 ]
 
 const router = createRouter({

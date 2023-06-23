@@ -62,6 +62,7 @@ public class PolicaRestController {
     @GetMapping("/api/police")
     public ResponseEntity<List<PolicaDto>> getPolice(){
         HttpSession session = sessionService.getSession();
+        //sessionService.setSession(session);
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
         if(korisnik == null) {
             System.out.println("Nema sesije");
