@@ -29,6 +29,11 @@ const routes = [
     name: 'zanrovi',
     component: () => import(/* webpackChunkName: "zanrovi" */ '../views/ZanroviView.vue')
   },
+  {
+    path: '/knjige-zanr/:id',
+    name: 'ZanroviView',
+    component: () => import(/* webpackChunkName: "ZanrComp" */ '../components/ZanrComponent.vue')
+  }, 
 ]
 
 const router = createRouter({

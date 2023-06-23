@@ -11,14 +11,14 @@
                     <th>Mejl adresa</th>
                 </tr>
 
-                <ZanrComp v-for = "korisnik in korisnici"
+                <!-- <ZanrComp v-for = "korisnik in korisnici"
                     :key = "korisnik.korisnikId"
                     :korisnikId = "korisnik.korisnikId"
                     :ime = korisnik.ime
                     :prezime = korisnik.prezime
                     :korisnickoIme = korisnik.korisnickoIme
                     :mejlAdresa = korisnik.mejlAdresa>
-                </ZanrComp>
+                </ZanrComp> -->
             </table>
         </div>
 </template>
